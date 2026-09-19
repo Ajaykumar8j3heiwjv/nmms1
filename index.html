@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NMMS Tamil Nadu – Bilingual NMMS Preparation Portal</title>
+<meta name="description" content="Tamil and English NMMS preparation portal for Tamil Nadu Class 8 students with study materials, quizzes, mock tests, previous year questions and progress tracking."/>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: { tamil: ['Noto Sans Tamil', 'sans-serif'], inter: ['Inter', 'sans-serif'] },
+      colors: {
+        brand: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a' },
+        saffron: { 400:'#fb923c',500:'#f97316',600:'#ea580c' }
+      }
+    }
+  }
+}
+</script>
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; margin: 0; }
+.tamil { font-family: 'Noto Sans Tamil', sans-serif; }
+.gradient-hero { background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 40%, #2563eb 70%, #0ea5e9 100%); }
+.card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+.timer-pulse { animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+.option-btn { transition: all 0.15s; }
+.option-btn:hover { transform: scale(1.01); }
+.sidebar-link { transition: all 0.15s; }
+.sidebar-link:hover { background: rgba(59,130,246,0.1); }
+.sidebar-link.active { background: #2563eb; color: white; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+.dark ::-webkit-scrollbar-track { background: #1e293b; }
+.dark ::-webkit-scrollbar-thumb { background: #475569; }
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; }
+.progress-bar { height: 8px; border-radius: 4px; background: #e2e8f0; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ============================================================
+// TRANSLATIONS
+// ============================================================
+const translations = {
+  en: {
+    appName: "NMMS Tamil Nadu",
+    tagline: "Bilingual NMMS Preparation Portal",
+    heroTitle: "Your Complete Bilingual NMMS Preparation Platform",
+    heroSubtitle: "Study materials, mock tests, previous year questions, daily quiz & progress tracking — all in Tamil & English",
+    startLearning: "Start Learning",
+    takeMockTest: "Take Mock Test",
+    studyMaterials: "Study Materials",
+    mockTests: "Mock Tests",
+    previousPapers: "Previous Papers",
+    dailyQuiz: "Daily Quiz",
+    myProgress: "My Progress",
+    announcements: "Announcements",
+    login: "Login",
+    register: "Register",
+    home: "Home",
+    todaysQuestion: "Today's Question",
+    submit: "Submit",
+    next: "Next",
+    previous: "Previous",
+    correct: "Correct!",
+    wrong: "Wrong!",
+    explanation: "Explanation",
+    score: "Score",
+    totalQuestions: "Total Questions",
+    attempted: "Attempted",
+    correctAns: "Correct",
+    wrongAns: "Wrong",
+    unanswered: "Unanswered",
+    percentage: "Percentage",
+    timeTaken: "Time Taken",
+    retake: "Retake Test",
+    reviewAnswers: "Review Answers",
+    yourAnswer: "Your Answer",
+    correctAnswer: "Correct Answer",
+    subject: "Subject",
+    topic: "Topic",
+    medium: "Medium",
+    difficulty: "Difficulty",
+    year: "Year",
+    tamil: "Tamil",
+    english: "English",
+    mathematics: "Mathematics",
+    science: "Science",
+    socialScience: "Social Science",
+    mentalAbility: "Mental Ability",
+    language: "Language",
+    mat: "MAT",
+    sat: "SAT",
+    all: "All",
+    filter: "Filter",
+    search: "Search...",
+    download: "Download",
+    view: "View",
+    published: "Published",
+    draft: "Draft",
+    easy: "Easy",
+    medium_d: "Medium",
+    hard: "Hard",
+    adminDashboard: "Admin Dashboard",
+    students: "Students",
+    materials: "Materials",
+    questions: "Questions",
+    tests: "Tests",
+    attempts: "Attempts",
+    addMaterial: "Add Material",
+    addQuestion: "Add Question",
+    createTest: "Create Mock Test",
+    publishQuiz: "Publish Daily Quiz",
+    viewResults: "View Results",
+    logout: "Logout",
+    welcomeBack: "Welcome back",
+    daysToExam: "days to NMMS Exam",
+    examDate: "NMMS Exam 2025",
+    streakDays: "Day Streak",
+    badges: "Badges",
+    weakTopics: "Weak Topics",
+    tipOfDay: "Tip of the Day",
+    instructions: "Instructions",
+    startTest: "Start Test",
+    duration: "Duration",
+    totalMarks: "Total Marks",
+    negativeMarking: "Negative Marking",
+    questionBank: "Question Bank",
+    settings: "Settings",
+    results: "Results",
+    noData: "No data found",
+    loading: "Loading...",
+    save: "Save",
+    cancel: "Cancel",
+    edit: "Edit",
+    delete: "Delete",
+    publish: "Publish",
+    unpublish: "Unpublish",
+    studentLogin: "Student Login",
+    adminLogin: "Admin Login",
+    email: "Email",
+    password: "Password",
+    name: "Name",
+    school: "School",
+    district: "District",
+    dontHaveAccount: "Don't have an account?",
+    alreadyHaveAccount: "Already have an account?",
+    registerHere: "Register here",
+    loginHere: "Login here",
+    avgScore: "Average Score",
+    highestScore: "Highest Score",
+    testsTaken: "Tests Taken",
+    quizAttempts: "Quiz Attempts",
+    questionsAttempted: "Questions Attempted",
+    materialsViewed: "Materials Viewed",
+    recentActivity: "Recent Activity",
+    subjectProgress: "Subject Progress",
+    darkMode: "Dark Mode",
+    lightMode: "Light Mode",
+    progress: "Progress",
+    markReview: "Mark for Review",
+    clearResponse: "Clear Response",
+    submitTest: "Submit Test",
+    timeLeft: "Time Left",
+    questionNav: "Question Navigation",
+    answered: "Answered",
+    notAnswered: "Not Answered",
+    markedReview: "Marked for Review",
+  },
+  ta: {
+    appName: "NMMS தமிழ்நாடு",
+    tagline: "இருமொழி NMMS தயாரிப்பு தளம்",
+    heroTitle: "உங்கள் முழுமையான இருமொழி NMMS தயாரிப்பு தளம்",
+    heroSubtitle: "படிப்புப் பொருட்கள், மாதிரி தேர்வுகள், முந்தைய ஆண்டு வினாக்கள், தினசரி வினாடி வினா & முன்னேற்றக் கண்காணிப்பு — தமிழ் & ஆங்கிலத்தில்",
+    startLearning: "படிக்கத் தொடங்கு",
+    takeMockTest: "மாதிரி தேர்வு எடு",
+    studyMaterials: "படிப்புப் பொருட்கள்",
+    mockTests: "மாதிரி தேர்வுகள்",
+    previousPapers: "முந்தைய வினாத்தாள்கள்",
+    dailyQuiz: "தினசரி வினாடி வினா",
+    myProgress: "என் முன்னேற்றம்",
+    announcements: "அறிவிப்புகள்",
+    login: "உள்நுழைவு",
+    register: "பதிவு செய்",
+    home: "முகப்பு",
+    todaysQuestion: "இன்றைய கேள்வி",
+    submit: "சமர்ப்பி",
+    next: "அடுத்து",
+    previous: "முந்தையது",
+    correct: "சரி!",
+    wrong: "தவறு!",
+    explanation: "விளக்கம்",
+    score: "மதிப்பெண்",
+    totalQuestions: "மொத்த வினாக்கள்",
+    attempted: "முயற்சித்தவை",
+    correctAns: "சரியானவை",
+    wrongAns: "தவறானவை",
+    unanswered: "பதிலளிக்காதவை",
+    percentage: "சதவீதம்",
+    timeTaken: "எடுத்த நேரம்",
+    retake: "மீண்டும் தேர்வு எடு",
+    reviewAnswers: "பதில்களை மதிப்பாய்வு செய்",
+    yourAnswer: "உங்கள் பதில்",
+    correctAnswer: "சரியான பதில்",
+    subject: "பாடம்",
+    topic: "தலைப்பு",
+    medium: "வழிமுறை",
+    difficulty: "நிலை",
+    year: "ஆண்டு",
+    tamil: "தமிழ்",
+    english: "ஆங்கிலம்",
+    mathematics: "கணிதம்",
+    science: "அறிவியல்",
+    socialScience: "சமூக அறிவியல்",
+    mentalAbility: "மனத்திறன்",
+    language: "மொழி",
+    mat: "MAT",
+    sat: "SAT",
+    all: "அனைத்தும்",
+    filter: "வடிகட்டு",
+    search: "தேடு...",
+    download: "பதிவிறக்கு",
+    view: "பார்",
+    published: "வெளியிடப்பட்டது",
+    draft: "வரைவு",
+    easy: "எளிது",
+    medium_d: "நடுத்தரம்",
+    hard: "கடினம்",
+    adminDashboard: "நிர்வாக டாஷ்போர்டு",
+    students: "மாணவர்கள்",
+    materials: "பொருட்கள்",
+    questions: "வினாக்கள்",
+    tests: "தேர்வுகள்",
+    attempts: "முயற்சிகள்",
+    addMaterial: "பொருள் சேர்",
+    addQuestion: "வினா சேர்",
+    createTest: "மாதிரி தேர்வு உருவாக்கு",
+    publishQuiz: "தினசரி வினா வெளியிடு",
+    viewResults: "முடிவுகள் பார்",
+    logout: "வெளியேறு",
+    welcomeBack: "வரவேற்கிறோம்",
+    daysToExam: "நாட்கள் NMMS தேர்வுக்கு",
+    examDate: "NMMS தேர்வு 2025",
+    streakDays: "நாள் தொடர்ச்சி",
+    badges: "பதக்கங்கள்",
+    weakTopics: "பலவீனமான தலைப்புகள்",
+    tipOfDay: "இன்றைய உதவிக்குறிப்பு",
+    instructions: "வழிமுறைகள்",
+    startTest: "தேர்வு தொடங்கு",
+    duration: "கால அளவு",
+    totalMarks: "மொத்த மதிப்பெண்கள்",
+    negativeMarking: "எதிர்மறை மதிப்பெண்",
+    questionBank: "வினா வங்கி",
+    settings: "அமைப்புகள்",
+    results: "முடிவுகள்",
+    noData: "தரவு இல்லை",
+    loading: "ஏற்றுகிறது...",
+    save: "சேமி",
+    cancel: "ரத்து செய்",
+    edit: "திருத்து",
+    delete: "நீக்கு",
+    publish: "வெளியிடு",
+    unpublish: "திரும்பப் பெறு",
+    studentLogin: "மாணவர் உள்நுழைவு",
+    adminLogin: "நிர்வாகி உள்நுழைவு",
+    email: "மின்னஞ்சல்",
+    password: "கடவுச்சொல்",
+    name: "பெயர்",
+    school: "பள்ளி",
+    district: "மாவட்டம்",
+    dontHaveAccount: "கணக்கு இல்லையா?",
+    alreadyHaveAccount: "ஏற்கனவே கணக்கு உள்ளதா?",
+    registerHere: "இங்கே பதிவு செய்",
+    loginHere: "இங்கே உள்நுழையுங்கள்",
+    avgScore: "சராசரி மதிப்பெண்",
+    highestScore: "உயர்ந்த மதிப்பெண்",
+    testsTaken: "எடுத்த தேர்வுகள்",
+    quizAttempts: "வினாடி வினா முயற்சிகள்",
+    questionsAttempted: "பயிற்சி செய்த வினாக்கள்",
+    materialsViewed: "பார்த்த பொருட்கள்",
+    recentActivity: "சமீபத்திய செயல்பாடு",
+    subjectProgress: "பாட முன்னேற்றம்",
+    darkMode: "இருண்ட பயன்முறை",
+    lightMode: "ஒளி பயன்முறை",
+    progress: "முன்னேற்றம்",
+    markReview: "மதிப்பாய்வுக்கு குறி",
+    clearResponse: "பதில் நீக்கு",
+    submitTest: "தேர்வு சமர்ப்பி",
+    timeLeft: "மீதமுள்ள நேரம்",
+    questionNav: "வினா வழிசெலுத்தல்",
+    answered: "பதில் அளித்தது",
+    notAnswered: "பதில் அளிக்காதது",
+    markedReview: "மதிப்பாய்வுக்கு குறிக்கப்பட்டது",
+  }
+};
+
+// ============================================================
+// DEMO DATA
+// ============================================================
+const demoQuestions = [
+  // MAT Questions
+  { id:1, question_en:"If CAT = 3+1+20 = 24, then DOG = ?", question_ta:"CAT = 24 என்றால், DOG = ?", option_a_en:"26", option_a_ta:"26", option_b_en:"27", option_b_ta:"27", option_c_en:"28", option_c_ta:"28", option_d_en:"25", option_d_ta:"25", correct_answer:"a", explanation_en:"D=4, O=15, G=7. 4+15+7=26", explanation_ta:"D=4, O=15, G=7. 4+15+7=26", category:"MAT", subject:"Mental Ability", topic:"Coding-Decoding", difficulty:"easy", year:2023, medium:"both" },
+  { id:2, question_en:"Find the odd one out: Apple, Mango, Potato, Banana", question_ta:"ஒற்றைப்படை கண்டுபிடி: ஆப்பிள், மாம்பழம், உருளைக்கிழங்கு, வாழைப்பழம்", option_a_en:"Apple", option_a_ta:"ஆப்பிள்", option_b_en:"Mango", option_b_ta:"மாம்பழம்", option_c_en:"Potato", option_c_ta:"உருளைக்கிழங்கு", option_d_en:"Banana", option_d_ta:"வாழைப்பழம்", correct_answer:"c", explanation_en:"Potato is a vegetable, rest are fruits.", explanation_ta:"உருளைக்கிழங்கு ஒரு காய்கறி, மற்றவை பழங்கள்.", category:"MAT", subject:"Mental Ability", topic:"Classification", difficulty:"easy", year:2022, medium:"both" },
+  { id:3, question_en:"2, 4, 8, 16, 32, ?", question_ta:"2, 4, 8, 16, 32, ?", option_a_en:"48", option_a_ta:"48", option_b_en:"64", option_b_ta:"64", option_c_en:"56", option_c_ta:"56", option_d_en:"72", option_d_ta:"72", correct_answer:"b", explanation_en:"Each number is multiplied by 2. 32×2=64", explanation_ta:"ஒவ்வொரு எண்ணும் 2 ஆல் பெருக்கப்படுகிறது. 32×2=64", category:"MAT", subject:"Mental Ability", topic:"Number Series", difficulty:"easy", year:2023, medium:"both" },
+  { id:4, question_en:"If A is the brother of B, B is the sister of C, then C is the ___ of A?", question_ta:"A என்பவர் B-யின் சகோதரர், B என்பவர் C-யின் சகோதரி, அப்படியானால் C என்பவர் A-யின் ___?", option_a_en:"Brother", option_a_ta:"சகோதரர்", option_b_en:"Sister", option_b_ta:"சகோதரி", option_c_en:"Brother or Sister", option_c_ta:"சகோதரர் அல்லது சகோதரி", option_d_en:"Cannot determine", option_d_ta:"தீர்மானிக்க இயலாது", correct_answer:"c", explanation_en:"C's gender is not known, so C can be brother or sister of A.", explanation_ta:"C-யின் பாலினம் தெரியாதாதால், C என்பவர் A-யின் சகோதரர் அல்லது சகோதரி.", category:"MAT", subject:"Mental Ability", topic:"Blood Relations", difficulty:"medium", year:2021, medium:"both" },
+  { id:5, question_en:"A man walks 5 km North, then 3 km East. How far is he from the start?", question_ta:"ஒரு மனிதன் 5 கி.மீ வடக்கே, பிறகு 3 கி.மீ கிழக்கே நடக்கிறான். ஆரம்ப இடத்திலிருந்து எவ்வளவு தூரத்தில் இருக்கிறான்?", option_a_en:"8 km", option_a_ta:"8 கி.மீ", option_b_en:"√34 km", option_b_ta:"√34 கி.மீ", option_c_en:"√34 km ≈ 5.83 km", option_c_ta:"√34 கி.மீ ≈ 5.83 கி.மீ", option_d_en:"6 km", option_d_ta:"6 கி.மீ", correct_answer:"c", explanation_en:"Using Pythagoras: √(5²+3²)=√(25+9)=√34≈5.83 km", explanation_ta:"பித்தாகரஸ் தேற்றம்: √(25+9)=√34≈5.83 கி.மீ", category:"MAT", subject:"Mental Ability", topic:"Direction Sense", difficulty:"medium", year:2023, medium:"both" },
+  // Mathematics Questions
+  { id:6, question_en:"What is the LCM of 12 and 18?", question_ta:"12 மற்றும் 18-ன் LCM என்ன?", option_a_en:"24", option_a_ta:"24", option_b_en:"36", option_b_ta:"36", option_c_en:"72", option_c_ta:"72", option_d_en:"6", option_d_ta:"6", correct_answer:"b", explanation_en:"LCM(12,18): 12=2²×3, 18=2×3². LCM=2²×3²=36", explanation_ta:"LCM(12,18): 12=2²×3, 18=2×3². LCM=2²×3²=36", category:"SAT", subject:"Mathematics", topic:"LCM and HCF", difficulty:"easy", year:2023, medium:"both" },
+  { id:7, question_en:"A train travels 360 km in 4 hours. What is its speed?", question_ta:"ஒரு ரயில் 4 மணி நேரத்தில் 360 கி.மீ. பயணிக்கிறது. அதன் வேகம் என்ன?", option_a_en:"80 km/h", option_a_ta:"80 கி.மீ/மணி", option_b_en:"90 km/h", option_b_ta:"90 கி.மீ/மணி", option_c_en:"100 km/h", option_c_ta:"100 கி.மீ/மணி", option_d_en:"70 km/h", option_d_ta:"70 கி.மீ/மணி", correct_answer:"b", explanation_en:"Speed = Distance/Time = 360/4 = 90 km/h", explanation_ta:"வேகம் = தூரம்/நேரம் = 360/4 = 90 கி.மீ/மணி", category:"SAT", subject:"Mathematics", topic:"Speed, Distance & Time", difficulty:"easy", year:2022, medium:"both" },
+  { id:8, question_en:"What is 15% of 200?", question_ta:"200-ல் 15% என்ன?", option_a_en:"25", option_a_ta:"25", option_b_en:"30", option_b_ta:"30", option_c_en:"35", option_c_ta:"35", option_d_en:"40", option_d_ta:"40", correct_answer:"b", explanation_en:"15% of 200 = (15/100)×200 = 30", explanation_ta:"200-ல் 15% = (15/100)×200 = 30", category:"SAT", subject:"Mathematics", topic:"Percentage", difficulty:"easy", year:2021, medium:"both" },
+  { id:9, question_en:"The area of a rectangle is 48 cm². If length is 8 cm, find the breadth.", question_ta:"ஒரு செவ்வகத்தின் பரப்பளவு 48 செ.மீ². நீளம் 8 செ.மீ. என்றால், அகலம் என்ன?", option_a_en:"5 cm", option_a_ta:"5 செ.மீ", option_b_en:"6 cm", option_b_ta:"6 செ.மீ", option_c_en:"7 cm", option_c_ta:"7 செ.மீ", option_d_en:"8 cm", option_d_ta:"8 செ.மீ", correct_answer:"b", explanation_en:"Area = Length × Breadth. 48 = 8 × Breadth. Breadth = 6 cm", explanation_ta:"பரப்பளவு = நீளம் × அகலம். 48 = 8 × அகலம். அகலம் = 6 செ.மீ", category:"SAT", subject:"Mathematics", topic:"Area and Perimeter", difficulty:"easy", year:2023, medium:"both" },
+  { id:10, question_en:"Simplify: (x² - 9) ÷ (x - 3)", question_ta:"எளிமையாக்கு: (x² - 9) ÷ (x - 3)", option_a_en:"x - 3", option_a_ta:"x - 3", option_b_en:"x + 3", option_b_ta:"x + 3", option_c_en:"x² + 3", option_c_ta:"x² + 3", option_d_en:"x + 9", option_d_ta:"x + 9", correct_answer:"b", explanation_en:"x²-9=(x+3)(x-3). Divided by (x-3) gives (x+3)", explanation_ta:"x²-9=(x+3)(x-3). (x-3) ஆல் வகுக்க (x+3) கிடைக்கும்", category:"SAT", subject:"Mathematics", topic:"Algebra", difficulty:"medium", year:2022, medium:"both" },
+  // Science Questions
+  { id:11, question_en:"What is the chemical formula of water?", question_ta:"நீரின் வேதியியல் சூத்திரம் என்ன?", option_a_en:"CO₂", option_a_ta:"CO₂", option_b_en:"H₂O", option_b_ta:"H₂O", option_c_en:"NaCl", option_c_ta:"NaCl", option_d_en:"O₂", option_d_ta:"O₂", correct_answer:"b", explanation_en:"Water consists of 2 hydrogen atoms and 1 oxygen atom: H₂O", explanation_ta:"நீரில் 2 ஹைட்ரஜன் மற்றும் 1 ஆக்சிஜன் அணு உள்ளன: H₂O", category:"SAT", subject:"Science", topic:"Chemistry Basics", difficulty:"easy", year:2023, medium:"both" },
+  { id:12, question_en:"Which organelle is called the powerhouse of the cell?", question_ta:"செல்லின் சக்தி மையம் என அழைக்கப்படும் உறுப்பு எது?", option_a_en:"Nucleus", option_a_ta:"கரு", option_b_en:"Mitochondria", option_b_ta:"மைட்டோகாண்ட்ரியா", option_c_en:"Ribosome", option_c_ta:"ரிபோசோம்", option_d_en:"Vacuole", option_d_ta:"வெற்றிடம்", correct_answer:"b", explanation_en:"Mitochondria produces ATP energy for the cell, hence called the powerhouse.", explanation_ta:"மைட்டோகாண்ட்ரியா செல்லுக்கு ATP ஆற்றலை உருவாக்குகிறது.", category:"SAT", subject:"Science", topic:"Cell Biology", difficulty:"easy", year:2022, medium:"both" },
+  { id:13, question_en:"Which planet is closest to the Sun?", question_ta:"சூரியனுக்கு மிக அருகில் உள்ள கோளம் எது?", option_a_en:"Venus", option_a_ta:"வீனஸ்", option_b_en:"Earth", option_b_ta:"பூமி", option_c_en:"Mercury", option_c_ta:"புதன்", option_d_en:"Mars", option_d_ta:"செவ்வாய்", correct_answer:"c", explanation_en:"Mercury is the closest planet to the Sun in our solar system.", explanation_ta:"புதன் கோளம் நம் சூரிய குடும்பத்தில் சூரியனுக்கு மிக அருகில் உள்ளது.", category:"SAT", subject:"Science", topic:"Solar System", difficulty:"easy", year:2021, medium:"both" },
+  { id:14, question_en:"Photosynthesis occurs in which part of the plant?", question_ta:"ஒளிச்சேர்க்கை தாவரத்தின் எந்த பகுதியில் நடைபெறுகிறது?", option_a_en:"Root", option_a_ta:"வேர்", option_b_en:"Stem", option_b_ta:"தண்டு", option_c_en:"Leaf", option_c_ta:"இலை", option_d_en:"Flower", option_d_ta:"மலர்", correct_answer:"c", explanation_en:"Photosynthesis mainly occurs in leaves where chlorophyll is present.", explanation_ta:"ஒளிச்சேர்க்கை முக்கியமாக இலைகளில் நடைபெறுகிறது, ஏனெனில் அங்கு பச்சையம் உள்ளது.", category:"SAT", subject:"Science", topic:"Plant Physiology", difficulty:"easy", year:2023, medium:"both" },
+  { id:15, question_en:"What type of energy is stored in a battery?", question_ta:"மின்கலத்தில் எந்த வகையான ஆற்றல் சேமிக்கப்படுகிறது?", option_a_en:"Kinetic Energy", option_a_ta:"இயக்க ஆற்றல்", option_b_en:"Chemical Energy", option_b_ta:"வேதி ஆற்றல்", option_c_en:"Nuclear Energy", option_c_ta:"அணு ஆற்றல்", option_d_en:"Solar Energy", option_d_ta:"சூரிய ஆற்றல்", correct_answer:"b", explanation_en:"Batteries store chemical energy and convert it to electrical energy.", explanation_ta:"மின்கலங்கள் வேதி ஆற்றலை சேமித்து மின் ஆற்றலாக மாற்றுகின்றன.", category:"SAT", subject:"Science", topic:"Energy", difficulty:"easy", year:2022, medium:"both" },
+  // Social Science Questions
+  { id:16, question_en:"Who wrote 'India of My Dreams'?", question_ta:"'என் கனவுகளின் இந்தியா' என்பதை யார் எழுதினார்?", option_a_en:"Jawaharlal Nehru", option_a_ta:"ஜவஹர்லால் நேரு", option_b_en:"Mahatma Gandhi", option_b_ta:"மகாத்மா காந்தி", option_c_en:"B.R. Ambedkar", option_c_ta:"பி.ஆர். அம்பேத்கர்", option_d_en:"Subhas Chandra Bose", option_d_ta:"சுபாஷ் சந்திர போஸ்", correct_answer:"b", explanation_en:"'India of My Dreams' was written by Mahatma Gandhi.", explanation_ta:"'என் கனவுகளின் இந்தியா' மகாத்மா காந்தி எழுதியது.", category:"SAT", subject:"Social Science", topic:"Modern India", difficulty:"easy", year:2023, medium:"both" },
+  { id:17, question_en:"Which river is called the 'Sorrow of Bihar'?", question_ta:"'பீகாரின் சோகம்' என்று அழைக்கப்படும் நதி எது?", option_a_en:"Ganga", option_a_ta:"கங்கை", option_b_en:"Kosi", option_b_ta:"கோசி", option_c_en:"Yamuna", option_c_ta:"யமுனை", option_d_en:"Brahmaputra", option_d_ta:"பிரம்மபுத்திரா", correct_answer:"b", explanation_en:"Kosi river is called the 'Sorrow of Bihar' due to frequent floods.", explanation_ta:"கோசி நதி அடிக்கடி வெள்ளத்தால் 'பீகாரின் சோகம்' என்று அழைக்கப்படுகிறது.", category:"SAT", subject:"Social Science", topic:"Indian Rivers", difficulty:"medium", year:2022, medium:"both" },
+  { id:18, question_en:"The Constitution of India came into effect on:", question_ta:"இந்திய அரசியலமைப்பு அமலுக்கு வந்த தேதி:", option_a_en:"15 August 1947", option_a_ta:"15 ஆகஸ்ட் 1947", option_b_en:"26 January 1950", option_b_ta:"26 ஜனவரி 1950", option_c_en:"26 November 1949", option_c_ta:"26 நவம்பர் 1949", option_d_en:"2 October 1948", option_d_ta:"2 அக்டோபர் 1948", correct_answer:"b", explanation_en:"The Constitution of India came into force on 26 January 1950, celebrated as Republic Day.", explanation_ta:"இந்திய அரசியலமைப்பு 26 ஜனவரி 1950 அன்று அமலுக்கு வந்தது, குடியரசு தினமாக கொண்டாடப்படுகிறது.", category:"SAT", subject:"Social Science", topic:"Indian Constitution", difficulty:"easy", year:2021, medium:"both" },
+  { id:19, question_en:"Which is the smallest state in India by area?", question_ta:"பரப்பளவில் இந்தியாவின் மிகச் சிறிய மாநிலம் எது?", option_a_en:"Kerala", option_a_ta:"கேரளா", option_b_en:"Goa", option_b_ta:"கோவா", option_c_en:"Sikkim", option_c_ta:"சிக்கிம்", option_d_en:"Tripura", option_d_ta:"திரிபுரா", correct_answer:"b", explanation_en:"Goa is the smallest state in India by area (3,702 sq km).", explanation_ta:"கோவா பரப்பளவில் இந்தியாவின் மிகச் சிறிய மாநிலம் (3,702 சதுர கி.மீ).", category:"SAT", subject:"Social Science", topic:"Indian Geography", difficulty:"easy", year:2023, medium:"both" },
+  { id:20, question_en:"The Quit India Movement was launched in:", question_ta:"வெள்ளையனே வெளியேறு இயக்கம் தொடங்கிய ஆண்டு:", option_a_en:"1930", option_a_ta:"1930", option_b_en:"1942", option_b_ta:"1942", option_c_en:"1945", option_c_ta:"1945", option_d_en:"1947", option_d_ta:"1947", correct_answer:"b", explanation_en:"The Quit India Movement was launched on 8 August 1942 by Mahatma Gandhi.", explanation_ta:"வெள்ளையனே வெளியேறு இயக்கம் 8 ஆகஸ்ட் 1942 அன்று மகாத்மா காந்தியால் தொடங்கப்பட்டது.", category:"SAT", subject:"Social Science", topic:"Freedom Struggle", difficulty:"easy", year:2022, medium:"both" },
+];
+
+const demoMaterials = [
+  { id:1, title_en:"Mental Ability Complete Notes", title_ta:"மனத்திறன் முழுமையான குறிப்புகள்", description_en:"Comprehensive notes covering all MAT topics including analogy, classification, number series, coding-decoding.", description_ta:"அனலஜி, வகைப்பாடு, எண் தொடர், குறியீடு-அர்த்தம் உட்பட அனைத்து MAT தலைப்புகளையும் உள்ளடக்கிய முழுமையான குறிப்புகள்.", subject:"Mental Ability", topic:"All Topics", medium:"both", category:"MAT", type:"Notes", published:true, thumbnail:"📚" },
+  { id:2, title_en:"Mathematics Formula Sheet", title_ta:"கணிதம் சூத்திர தாள்", description_en:"All important formulas for Class 8 Mathematics - Algebra, Geometry, Mensuration, Statistics.", description_ta:"8ம் வகுப்பு கணிதத்திற்கான அனைத்து முக்கிய சூத்திரங்கள் - இயற்கணிதம், வடிவியல், அளவியல், புள்ளியியல்.", subject:"Mathematics", topic:"All Topics", medium:"both", category:"SAT", type:"PDF", published:true, thumbnail:"📐" },
+  { id:3, title_en:"Science Chapter-wise MCQs", title_ta:"அறிவியல் அத்தியாயம் வாரியான MCQ", description_en:"500+ multiple choice questions from all Science chapters with answers and detailed explanations.", description_ta:"அனைத்து அறிவியல் அத்தியாயங்களிலிருந்து 500+ பல தேர்வு கேள்விகள் - விடைகள் மற்றும் விளக்கங்களுடன்.", subject:"Science", topic:"All Chapters", medium:"both", category:"SAT", type:"Quiz", published:true, thumbnail:"🔬" },
+  { id:4, title_en:"Social Science Map Work", title_ta:"சமூக அறிவியல் வரைபட பணி", description_en:"Complete map-based questions and answers for Indian Geography and History.", description_ta:"இந்திய புவியியல் மற்றும் வரலாற்றிற்கான முழுமையான வரைபட கேள்விகள் மற்றும் விடைகள்.", subject:"Social Science", topic:"Geography & History", medium:"both", category:"SAT", type:"PDF", published:true, thumbnail:"🗺️" },
+];
+
+const demoMockTests = [
+  { id:1, title_en:"NMMS Full Mock Test - 2024", title_ta:"NMMS முழு மாதிரி தேர்வு - 2024", description_en:"Complete NMMS mock test with 90 MAT + 90 SAT questions. Duration: 180 minutes.", description_ta:"90 MAT + 90 SAT வினாக்களுடன் முழுமையான NMMS மாதிரி தேர்வு. கால அளவு: 180 நிமிடங்கள்.", duration:180, total_questions:20, marks:1, negative_marks:0, status:"published", questions:[6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,1,2,3,4,5] },
+  { id:2, title_en:"MAT Practice Test - Series 1", title_ta:"MAT பயிற்சி தேர்வு - தொடர் 1", description_en:"Focus on Mental Ability questions - analogy, classification, series.", description_ta:"மனத்திறன் வினாக்களில் கவனம் - அனலஜி, வகைப்பாடு, தொடர்.", duration:45, total_questions:5, marks:1, negative_marks:0, status:"published", questions:[1,2,3,4,5] },
+  { id:3, title_en:"SAT Mathematics Test", title_ta:"SAT கணிதம் தேர்வு", description_en:"Mathematics SAT preparation test covering all important topics.", description_ta:"அனைத்து முக்கிய தலைப்புகளையும் உள்ளடக்கிய கணிதம் SAT தயாரிப்பு தேர்வு.", duration:60, total_questions:5, marks:1, negative_marks:0, status:"published", questions:[6,7,8,9,10] },
+];
+
+const demoPreviousPapers = [
+  { id:1, year:2023, medium:"both", category:"MAT", title:"NMMS 2023 MAT Question Paper", questions:[1,2,3,4,5] },
+  { id:2, year:2023, medium:"both", category:"SAT", title:"NMMS 2023 SAT Question Paper", questions:[6,7,8,11,12] },
+  { id:3, year:2022, medium:"both", category:"MAT", title:"NMMS 2022 MAT Question Paper", questions:[2,4,5,1,3] },
+  { id:4, year:2021, medium:"both", category:"SAT", title:"NMMS 2021 SAT Question Paper", questions:[8,13,18,9,10] },
+];
+
+const demoAnnouncements = [
+  { id:1, title_en:"NMMS 2025 Exam Notification Released!", title_ta:"NMMS 2025 தேர்வு அறிவிப்பு வெளியிடப்பட்டது!", description_en:"The official notification for NMMS Exam 2025 has been released by Tamil Nadu State Government. Application starts from October 2025.", description_ta:"NMMS தேர்வு 2025-க்கான அதிகாரப்பூர்வ அறிவிப்பு வெளியிடப்பட்டது. விண்ணப்பம் அக்டோபர் 2025 முதல் தொடங்குகிறது.", date:"2026-09-15", published:true, type:"exam" },
+  { id:2, title_en:"New Study Materials Added - Mathematics", title_ta:"புதிய படிப்புப் பொருட்கள் சேர்க்கப்பட்டன - கணிதம்", description_en:"20 new practice questions on Algebra and Geometry have been added to the Question Bank.", description_ta:"இயற்கணிதம் மற்றும் வடிவியலில் 20 புதிய பயிற்சி கேள்விகள் வினா வங்கியில் சேர்க்கப்பட்டன.", date:"2026-09-18", published:true, type:"material" },
+  { id:3, title_en:"Mock Test Series 2 - Now Available", title_ta:"மாதிரி தேர்வு தொடர் 2 - இப்போது கிடைக்கிறது", description_en:"The second series of mock tests covering Science and Social Science is now available for practice.", description_ta:"அறிவியல் மற்றும் சமூக அறிவியலை உள்ளடக்கிய இரண்டாவது மாதிரி தேர்வு தொடர் பயிற்சிக்கு கிடைக்கிறது.", date:"2026-09-17", published:true, type:"test" },
+];
+
+const tipsOfDay = [
+  { en: "Practice at least 20 MAT questions daily. Focus on pattern recognition!", ta: "தினமும் குறைந்தது 20 MAT வினாக்களை பயிற்சி செய்யுங்கள். வடிவ அங்கீகாரத்தில் கவனம் செலுத்துங்கள்!" },
+  { en: "Revise Science formulas every morning. Consistency is the key to success.", ta: "ஒவ்வொரு காலையிலும் அறிவியல் சூத்திரங்களை மதிப்பாய்வு செய்யுங்கள். தொடர்ச்சியே வெற்றியின் திறவுகோல்." },
+  { en: "Read the question carefully before answering. Eliminate wrong options first.", ta: "பதிலளிப்பதற்கு முன் கேள்வியை கவனமாக படியுங்கள். தவறான விருப்பங்களை முதலில் நீக்குங்கள்." },
+  { en: "Take a 5-minute break every 45 minutes of study. Your brain needs rest!", ta: "45 நிமிட படிப்பிற்கு பிறகு 5 நிமிட இடைவெளி எடுங்கள். உங்கள் மூளைக்கு ஓய்வு தேவை!" },
+  { en: "Previous year papers are the best way to understand exam patterns.", ta: "முந்தைய ஆண்டு வினாத்தாள்கள் தேர்வு முறைகளை புரிந்துகொள்வதற்கான சிறந்த வழி." },
+];
+
+// ============================================================
+// UTILITY FUNCTIONS
+// ============================================================
+const getLS = (key, def) => { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; } };
+const setLS = (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} };
+const fmtTime = (s) => { const m = Math.floor(s/60); const sec = s%60; return `${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`; };
+const getExamDays = () => { const exam = new Date('2026-11-20'); const now = new Date(); return Math.max(0, Math.ceil((exam-now)/(1000*60*60*24))); };
+const todayTip = tipsOfDay[new Date().getDay() % tipsOfDay.length];
+
+// ============================================================
+// CONTEXT
+// ============================================================
+const AppContext = React.createContext(null);
+
+function AppProvider({ children }) {
+  const [lang, setLang] = React.useState(getLS('nmms_lang','en'));
+  const [dark, setDark] = React.useState(getLS('nmms_dark',false));
+  const [user, setUser] = React.useState(getLS('nmms_user',null));
+  const [page, setPage] = React.useState('home');
+  const [pageData, setPageData] = React.useState(null);
+  const [questions, setQuestions] = React.useState(getLS('nmms_questions', demoQuestions));
+  const [materials, setMaterials] = React.useState(getLS('nmms_materials', demoMaterials));
+  const [mockTests, setMockTests] = React.useState(getLS('nmms_tests', demoMockTests));
+  const [announcements, setAnnouncements] = React.useState(getLS('nmms_ann', demoAnnouncements));
+  const [previousPapers, setPreviousPapers] = React.useState(getLS('nmms_papers', demoPreviousPapers));
+  const [users, setUsers] = React.useState(getLS('nmms_users', [{ id:1, name:'Demo Student', email:'student@demo.com', password:'demo123', role:'student', school:'Govt. High School', district:'Chennai', streak:5, badges:['🏆','⭐','🔥'] }]));
+  const [progress, setProgress] = React.useState(getLS('nmms_progress', { mat:62, mathematics:75, science:58, socialScience:70, sat:68, testsTaken:3, quizAttempts:12, avgScore:68, highestScore:85, questionsAttempted:45, materialsViewed:4, streak:5, recentActivity:[ {type:'test',text:'Completed MAT Practice Test - Score: 80%',date:'Today'}, {type:'quiz',text:'Daily Quiz answered correctly',date:'Yesterday'}, {type:'material',text:'Viewed Mathematics Formula Sheet',date:'2 days ago'} ] }));
+  const [dailyQuiz] = React.useState({ question: questions[0], answered: getLS('nmms_dq_answered', false), userAnswer: getLS('nmms_dq_answer', null) });
+
+  React.useEffect(() => { document.documentElement.classList.toggle('dark', dark); setLS('nmms_dark', dark); }, [dark]);
+  React.useEffect(() => { setLS('nmms_lang', lang); }, [lang]);
+  React.useEffect(() => { setLS('nmms_questions', questions); }, [questions]);
+  React.useEffect(() => { setLS('nmms_materials', materials); }, [materials]);
+  React.useEffect(() => { setLS('nmms_tests', mockTests); }, [mockTests]);
+  React.useEffect(() => { setLS('nmms_ann', announcements); }, [announcements]);
+  React.useEffect(() => { setLS('nmms_users', users); }, [users]);
+  React.useEffect(() => { setLS('nmms_user', user); }, [user]);
+  React.useEffect(() => { setLS('nmms_progress', progress); }, [progress]);
+
+  const t = (key) => translations[lang][key] || key;
+  const nav = (p, data=null) => { setPage(p); setPageData(data); window.scrollTo(0,0); };
+
+  const login = (email, password, role) => {
+    if (role === 'admin' && email === 'admin@nmms.in' && password === 'admin123') {
+      const adminUser = { id:0, name:'Admin Teacher', email, role:'admin' };
+      setUser(adminUser); return { ok:true };
+    }
+    const found = users.find(u => u.email === email && u.password === password && u.role === 'student');
+    if (found) { setUser(found); return { ok:true }; }
+    return { ok:false, error:'Invalid credentials' };
+  };
+
+  const register = (data) => {
+    if (users.find(u => u.email === data.email)) return { ok:false, error:'Email already registered' };
+    const newUser = { ...data, id: Date.now(), role:'student', streak:0, badges:[] };
+    setUsers(prev => [...prev, newUser]);
+    setUser(newUser);
+    return { ok:true };
+  };
+
+  const logout = () => { setUser(null); nav('home'); };
+
+  const updateProgress = (type, score) => {
+    setProgress(prev => {
+      const updated = { ...prev };
+      if (type === 'test') { updated.testsTaken = (prev.testsTaken||0)+1; updated.avgScore = Math.round(((prev.avgScore||0)*(prev.testsTaken||0)+score)/((prev.testsTaken||0)+1)); updated.highestScore = Math.max(prev.highestScore||0, score); }
+      if (type === 'quiz') { updated.quizAttempts = (prev.quizAttempts||0)+1; }
+      return updated;
+    });
+  };
+
+  return (
+    <AppContext.Provider value={{ lang, setLang, dark, setDark, user, page, pageData, nav, t, login, register, logout, questions, setQuestions, materials, setMaterials, mockTests, setMockTests, announcements, setAnnouncements, previousPapers, setPreviousPapers, users, progress, updateProgress, dailyQuiz }}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+const useApp = () => React.useContext(AppContext);
+
+// ============================================================
+// SHARED COMPONENTS
+// ============================================================
+function Badge({ children, color='blue' }) {
+  const colors = { blue:'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300', green:'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300', orange:'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300', red:'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300', purple:'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300', gray:'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300' };
+  return <span className={`badge ${colors[color]||colors.blue}`}>{children}</span>;
+}
+
+function ProgressBar({ value, color='blue' }) {
+  const colors = { blue:'bg-blue-500', green:'bg-green-500', orange:'bg-orange-500', purple:'bg-purple-500', red:'bg-red-500' };
+  return <div className="progress-bar"><div className={`progress-fill ${colors[color]||colors.blue}`} style={{width:`${Math.min(100,value)}%`}}></div></div>;
+}
+
+function Card({ children, className='', onClick }) {
+  return <div onClick={onClick} className={`bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 ${onClick?'cursor-pointer card-hover':''} ${className}`}>{children}</div>;
+}
+
+function Button({ children, onClick, variant='primary', size='md', className='', disabled=false, type='button' }) {
+  const variants = { primary:'bg-blue-600 hover:bg-blue-700 text-white shadow-sm', secondary:'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200', success:'bg-green-600 hover:bg-green-700 text-white', danger:'bg-red-600 hover:bg-red-700 text-white', outline:'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900' };
+  const sizes = { sm:'px-3 py-1.5 text-sm', md:'px-4 py-2 text-sm', lg:'px-6 py-3 text-base' };
+  return <button type={type} onClick={onClick} disabled={disabled} className={`${variants[variant]||variants.primary} ${sizes[size]||sizes.md} rounded-xl font-semibold transition-all duration-150 ${disabled?'opacity-50 cursor-not-allowed':''} ${className}`}>{children}</button>;
+}
+
+function Input({ label, type='text', value, onChange, placeholder, required, className='' }) {
+  return (
+    <div className={className}>
+      {label && <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>}
+      <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} required={required}
+        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"/>
+    </div>
+  );
+}
+
+function Select({ label, value, onChange, options, className='' }) {
+  return (
+    <div className={className}>
+      {label && <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>}
+      <select value={value} onChange={e=>onChange(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+        {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+      </select>
+    </div>
+  );
+}
+
+function Modal({ open, onClose, title, children }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto fade-in" onClick={e=>e.stopPropagation()}>
+        <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-700">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-2xl leading-none">&times;</button>
+        </div>
+        <div className="p-5">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+function Toast({ message, type, onClose }) {
+  React.useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, []);
+  const colors = { success:'bg-green-500', error:'bg-red-500', info:'bg-blue-500' };
+  return (
+    <div className={`fixed bottom-5 right-5 z-50 ${colors[type]||colors.info} text-white px-5 py-3 rounded-xl shadow-lg fade-in flex items-center gap-3`}>
+      <span>{message}</span>
+      <button onClick={onClose} className="text-white/80 hover:text-white">&times;</button>
+    </div>
+  );
+}
+
+// ============================================================
+// NAVBAR
+// ============================================================
+function Navbar() {
+  const { lang, setLang, dark, setDark, user, nav, logout, t, page } = useApp();
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const navLinks = [ {key:'home',label:t('home')}, {key:'studyMaterials',label:t('studyMaterials')}, {key:'mockTests',label:t('mockTests')}, {key:'previousPapers',label:t('previousPapers')}, {key:'dailyQuiz',label:t('dailyQuiz')}, {key:'progress',label:t('myProgress')} ];
+
+  return (
+    <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <div className="flex items-center gap-3 cursor-pointer" onClick={()=>nav('home')}>
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center text-white font-bold text-sm">NM</div>
+            <div className="hidden sm:block">
+              <div className="font-bold text-gray-900 dark:text-white text-sm">{t('appName')}</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tagline')}</div>
+            </div>
+          </div>
+          {/* Desktop Nav */}
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map(l => (
+              <button key={l.key} onClick={()=>nav(l.key)} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${page===l.key?'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400':'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'}`}>{l.label}</button>
+            ))}
+          </div>
+          {/* Right controls */}
+          <div className="flex items-center gap-2">
+            {/* Lang toggle */}
+            <button onClick={()=>setLang(lang==='en'?'ta':'en')} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+              <span className={lang==='ta'?'tamil':''}>{lang==='en'?'தமிழ்':'English'}</span>
+            </button>
+            {/* Dark mode */}
+            <button onClick={()=>setDark(!dark)} className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+              {dark ? '☀️' : '🌙'}
+            </button>
+            {/* User/Login */}
+            {user ? (
+              <div className="flex items-center gap-2">
+                {user.role==='admin' && <Button onClick={()=>nav('admin')} size="sm" variant="secondary">Admin</Button>}
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                  <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">{user.name[0]}</div>
+                  <span className="text-sm font-medium text-blue-700 dark:text-blue-300 hidden sm:block">{user.name.split(' ')[0]}</span>
+                </div>
+                <Button onClick={logout} size="sm" variant="secondary">{t('logout')}</Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1">
+                <Button onClick={()=>nav('login')} size="sm" variant="secondary">{t('login')}</Button>
+                <Button onClick={()=>nav('register')} size="sm">{t('register')}</Button>
+              </div>
+            )}
+            {/* Mobile menu */}
+            <button onClick={()=>setMenuOpen(!menuOpen)} className="lg:hidden w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300">☰</button>
+          </div>
+        </div>
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div className="lg:hidden pb-3 pt-1 border-t border-gray-100 dark:border-gray-800 fade-in">
+            {navLinks.map(l => (
+              <button key={l.key} onClick={()=>{nav(l.key);setMenuOpen(false);}} className={`block w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition ${page===l.key?'bg-blue-50 dark:bg-blue-900/30 text-blue-600':'text-gray-700 dark:text-gray-300'}`}>{l.label}</button>
+            ))}
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+}
+
+// ============================================================
+// HOME PAGE
+// ============================================================
+function HomePage() {
+  const { t, nav, lang, announcements, dailyQuiz, user } = useApp();
+  const [dqAnswer, setDqAnswer] = React.useState(null);
+  const [dqSubmitted, setDqSubmitted] = React.useState(false);
+  const q = dailyQuiz.question;
+  const examDays = getExamDays();
+
+  const features = [
+    { icon:'📚', key:'studyMaterials', color:'from-blue-500 to-blue-600', desc_en:'PDFs, Notes & Videos', desc_ta:'PDF கள், குறிப்புகள் & வீடியோக்கள்' },
+    { icon:'📝', key:'mockTests', color:'from-purple-500 to-purple-600', desc_en:'Full Mock Tests', desc_ta:'முழு மாதிரி தேர்வுகள்' },
+    { icon:'📅', key:'previousPapers', color:'from-orange-500 to-orange-600', desc_en:'2018–2023 Papers', desc_ta:'2018–2023 வினாத்தாள்கள்' },
+    { icon:'🎯', key:'dailyQuiz', color:'from-green-500 to-green-600', desc_en:'Daily Practice', desc_ta:'தினசரி பயிற்சி' },
+    { icon:'📊', key:'progress', color:'from-red-500 to-red-600', desc_en:'Track Your Progress', desc_ta:'உங்கள் முன்னேற்றம்' },
+    { icon:'📢', key:'announcements', color:'from-yellow-500 to-yellow-600', desc_en:'Latest Updates', desc_ta:'சமீபத்திய புதுப்பிப்புகள்' },
+  ];
+
+  return (
+    <div className="fade-in">
+      {/* Hero */}
+      <div className="gradient-hero text-white py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 text-sm font-medium">
+            <span>🎓</span>
+            <span className={lang==='ta'?'tamil':''}>Tamil Nadu Class 8 | NMMS Scholarship 2025</span>
+          </div>
+          <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight ${lang==='ta'?'tamil':''}`}>
+            {t('heroTitle')}
+          </h1>
+          <p className={`text-blue-100 text-lg mb-8 max-w-2xl mx-auto ${lang==='ta'?'tamil':''}`}>{t('heroSubtitle')}</p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <button onClick={()=>nav('studyMaterials')} className="bg-white text-blue-700 px-8 py-3 rounded-xl font-bold text-base hover:bg-blue-50 transition shadow-lg">
+              {lang==='ta'?<span className="tamil">📚 {t('startLearning')}</span>:`📚 ${t('startLearning')}`}
+            </button>
+            <button onClick={()=>nav('mockTests')} className="bg-blue-500/30 backdrop-blur-sm border-2 border-white/40 text-white px-8 py-3 rounded-xl font-bold text-base hover:bg-blue-500/50 transition">
+              {lang==='ta'?<span className="tamil">📝 {t('takeMockTest')}</span>:`📝 ${t('takeMockTest')}`}
+            </button>
+          </div>
+          {/* Stats bar */}
+          <div className="grid grid-cols-3 gap-4 mt-10 max-w-lg mx-auto">
+            {[['1000+','Students'],['500+','Questions'],['10+','Mock Tests']].map(([num,lab])=>(
+              <div key={lab} className="bg-white/10 backdrop-blur-sm rounded-xl py-3">
+                <div className="text-2xl font-extrabold">{num}</div>
+                <div className="text-blue-200 text-xs">{lab}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-10 space-y-10">
+        {/* Exam countdown + Tip */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200 dark:border-orange-700">
+            <div className="flex items-center gap-4">
+              <div className="text-5xl">⏳</div>
+              <div>
+                <div className="text-4xl font-extrabold text-orange-600 dark:text-orange-400">{examDays}</div>
+                <div className={`text-orange-700 dark:text-orange-300 font-semibold ${lang==='ta'?'tamil':''}`}>{t('daysToExam')}</div>
+                <div className="text-orange-500 text-sm">{t('examDate')}</div>
+              </div>
+            </div>
+          </Card>
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-700">
+            <div className="flex items-start gap-3">
+              <div className="text-3xl">💡</div>
+              <div>
+                <div className="font-bold text-green-700 dark:text-green-400 mb-1">{t('tipOfDay')}</div>
+                <div className={`text-green-800 dark:text-green-300 text-sm leading-relaxed ${lang==='ta'?'tamil':''}`}>{lang==='ta'?todayTip.ta:todayTip.en}</div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Feature Cards */}
+        <div>
+          <h2 className={`text-2xl font-bold text-gray-900 dark:text-white mb-5 ${lang==='ta'?'tamil':''}`}>
+            {lang==='ta'?'📖 என்ன படிக்கலாம்?':'📖 What would you like to do?'}
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {features.map(f => (
+              <Card key={f.key} onClick={()=>nav(f.key)} className="text-center">
+                <div className={`w-12 h-12 bg-gradient-to-br ${f.color} rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3 shadow-sm`}>{f.icon}</div>
+                <div className={`font-bold text-gray-900 dark:text-white text-sm ${lang==='ta'?'tamil':''}`}>{t(f.key==='studyMaterials'?'studyMaterials':f.key==='mockTests'?'mockTests':f.key==='previousPapers'?'previousPapers':f.key==='dailyQuiz'?'dailyQuiz':f.key==='progress'?'myProgress':'announcements')}</div>
+                <div className={`text-gray-500 dark:text-gray-400 text-xs mt-1 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?f.desc_ta:f.desc_en}</div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Today's Question */}
+        <Card>
+          <h2 className={`text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 ${lang==='ta'?'tamil':''}`}>
+            🎯 {t('todaysQuestion')}
+          </h2>
+          <div className={`text-gray-800 dark:text-gray-200 font-medium mb-4 text-base leading-relaxed ${lang==='ta'?'tamil':''}`}>
+            {lang==='ta'?q.question_ta:q.question_en}
+          </div>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {['a','b','c','d'].map(opt => {
+              const text = lang==='ta'?q[`option_${opt}_ta`]:q[`option_${opt}_en`];
+              const isSelected = dqAnswer===opt;
+              const isCorrect = opt===q.correct_answer;
+              let cls = 'border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200';
+              if (dqSubmitted) { if (isCorrect) cls='border-2 border-green-500 bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-200'; else if (isSelected && !isCorrect) cls='border-2 border-red-400 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200'; }
+              else if (isSelected) cls='border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200';
+              return (
+                <button key={opt} onClick={()=>{if(!dqSubmitted)setDqAnswer(opt);}} className={`option-btn p-3 rounded-xl text-left text-sm font-medium ${cls}`}>
+                  <span className="font-bold mr-2">{opt.toUpperCase()}.</span>{lang==='ta'?<span className="tamil">{text}</span>:text}
+                </button>
+              );
+            })}
+          </div>
+          {!dqSubmitted ? (
+            <Button onClick={()=>{if(dqAnswer)setDqSubmitted(true);}} disabled={!dqAnswer} className="mt-4">{t('submit')}</Button>
+          ) : (
+            <div className={`mt-4 p-4 rounded-xl ${dqAnswer===q.correct_answer?'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700':'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700'}`}>
+              <div className={`font-bold text-lg mb-1 ${dqAnswer===q.correct_answer?'text-green-700 dark:text-green-400':'text-red-600 dark:text-red-400'}`}>
+                {dqAnswer===q.correct_answer?'✅ '+t('correct'):'❌ '+t('wrong')}
+              </div>
+              <div className={`text-sm text-gray-700 dark:text-gray-300 ${lang==='ta'?'tamil':''}`}><span className="font-semibold">{t('explanation')}:</span> {lang==='ta'?q.explanation_ta:q.explanation_en}</div>
+            </div>
+          )}
+        </Card>
+
+        {/* Announcements */}
+        <div>
+          <h2 className={`text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 ${lang==='ta'?'tamil':''}`}>📢 {t('announcements')}</h2>
+          <div className="space-y-3">
+            {announcements.filter(a=>a.published).slice(0,3).map(a => (
+              <Card key={a.id} className="border-l-4 border-blue-500">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">{a.type==='exam'?'🎓':a.type==='material'?'📚':'📝'}</span>
+                  <div className="flex-1">
+                    <div className={`font-bold text-gray-900 dark:text-white ${lang==='ta'?'tamil':''}`}>{lang==='ta'?a.title_ta:a.title_en}</div>
+                    <div className={`text-sm text-gray-500 dark:text-gray-400 mt-1 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?a.description_ta:a.description_en}</div>
+                    <div className="text-xs text-gray-400 mt-2">{a.date}</div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// AUTH PAGES
+// ============================================================
+function LoginPage() {
+  const { t, nav, login, lang } = useApp();
+  const [tab, setTab] = React.useState('student');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const res = login(email, password, tab);
+    if (res.ok) nav('home');
+    else setError(res.error);
+  };
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-10 fade-in">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4">NM</div>
+          <h1 className={`text-2xl font-extrabold text-gray-900 dark:text-white ${lang==='ta'?'tamil':''}`}>{t('login')}</h1>
+        </div>
+        <Card>
+          <div className="flex bg-gray-100 dark:bg-gray-700 rounded-xl p-1 mb-6">
+            <button onClick={()=>setTab('student')} className={`flex-1 py-2 rounded-lg text-sm font-semibold transition ${tab==='student'?'bg-white dark:bg-gray-800 shadow text-blue-600':'text-gray-500 dark:text-gray-400'}`}>{t('studentLogin')}</button>
+            <button onClick={()=>setTab('admin')} className={`flex-1 py-2 rounded-lg text-sm font-semibold transition ${tab==='admin'?'bg-white dark:bg-gray-800 shadow text-blue-600':'text-gray-500 dark:text-gray-400'}`}>{t('adminLogin')}</button>
+          </div>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <Input label={t('email')} type="email" value={email} onChange={setEmail} placeholder="your@email.com" required/>
+            <Input label={t('password')} type="password" value={password} onChange={setPassword} placeholder="••••••••" required/>
+            {error && <div className="text-red-500 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">{error}</div>}
+            {tab==='admin' && <div className="text-xs text-gray-400 bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">Demo: admin@nmms.in / admin123</div>}
+            {tab==='student' && <div className="text-xs text-gray-400 bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">Demo: student@demo.com / demo123</div>}
+            <Button type="submit" className="w-full" size="lg">{t('login')}</Button>
+          </form>
+          <p className={`text-center text-sm text-gray-500 dark:text-gray-400 mt-4 ${lang==='ta'?'tamil':''}`}>
+            {t('dontHaveAccount')} <button onClick={()=>nav('register')} className="text-blue-600 font-semibold hover:underline">{t('registerHere')}</button>
+          </p>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+function RegisterPage() {
+  const { t, nav, register, lang } = useApp();
+  const [form, setForm] = React.useState({ name:'', email:'', password:'', school:'', district:'' });
+  const [error, setError] = React.useState('');
+  const set = (k) => (v) => setForm(f=>({...f,[k]:v}));
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    const res = register({ ...form, role:'student' });
+    if (res.ok) nav('home');
+    else setError(res.error);
+  };
+
+  const districts = ['Chennai','Coimbatore','Madurai','Tiruchirappalli','Salem','Tirunelveli','Tiruppur','Ranipet','Vellore','Erode','Thoothukudi','Dindigul','Thanjavur','Cuddalore','Kanchipuram','Namakkal','Sivaganga','Virudhunagar','Nagapattinam','Nilgiris','Pudukkottai','Ramanathapuram','Theni','Krishnagiri','Dharmapuri','Villupuram','Ariyalur','Perambalur','Karur','Tiruvarur','Tiruvannamalai','Kallakurichi','Chengalpattu','Tenkasi','Mayiladuthurai'];
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-10 fade-in">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4">NM</div>
+          <h1 className={`text-2xl font-extrabold text-gray-900 dark:text-white ${lang==='ta'?'tamil':''}`}>{t('register')}</h1>
+        </div>
+        <Card>
+          <form onSubmit={handleRegister} className="space-y-4">
+            <Input label={t('name')} value={form.name} onChange={set('name')} placeholder="Your full name" required/>
+            <Input label={t('email')} type="email" value={form.email} onChange={set('email')} placeholder="your@email.com" required/>
+            <Input label={t('password')} type="password" value={form.password} onChange={set('password')} placeholder="Min 6 characters" required/>
+            <Input label={t('school')} value={form.school} onChange={set('school')} placeholder="Your school name"/>
+            <Select label={t('district')} value={form.district} onChange={set('district')} options={[{value:'',label:'Select District'},...districts.map(d=>({value:d,label:d}))]}/>
+            {error && <div className="text-red-500 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">{error}</div>}
+            <Button type="submit" className="w-full" size="lg">{t('register')}</Button>
+          </form>
+          <p className={`text-center text-sm text-gray-500 dark:text-gray-400 mt-4 ${lang==='ta'?'tamil':''}`}>
+            {t('alreadyHaveAccount')} <button onClick={()=>nav('login')} className="text-blue-600 font-semibold hover:underline">{t('loginHere')}</button>
+          </p>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// QUIZ ENGINE
+// ============================================================
+function QuizEngine({ questions: qs, title, duration, onFinish, lang, t }) {
+  const [current, setCurrent] = React.useState(0);
+  const [answers, setAnswers] = React.useState({});
+  const [marked, setMarked] = React.useState({});
+  const [submitted, setSubmitted] = React.useState(false);
+  const [timeLeft, setTimeLeft] = React.useState(duration ? duration*60 : null);
+  const [startTime] = React.useState(Date.now());
+  const [showNav, setShowNav] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!timeLeft || submitted) return;
+    const interval = setInterval(() => {
+      setTimeLeft(t => { if (t <= 1) { setSubmitted(true); return 0; } return t-1; });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timeLeft, submitted]);
+
+  const q = qs[current];
+  const total = qs.length;
+  const correct = qs.filter(q => answers[q.id] === q.correct_answer).length;
+  const wrong = Object.keys(answers).filter(id => answers[id] !== qs.find(q=>q.id==id)?.correct_answer).length;
+  const attempted = Object.keys(answers).length;
+  const unanswered = total - attempted;
+  const score = correct;
+  const pct = Math.round((correct/total)*100);
+  const timeTaken = Math.floor((Date.now()-startTime)/1000);
+
+  if (submitted) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-8 fade-in space-y-6">
+        {/* Result header */}
+        <div className={`text-center p-8 rounded-2xl ${pct>=40?'bg-gradient-to-br from-green-500 to-green-600':'bg-gradient-to-br from-red-500 to-red-600'} text-white`}>
+          <div className="text-6xl mb-3">{pct>=40?'🏆':'📚'}</div>
+          <div className="text-5xl font-extrabold mb-1">{pct}%</div>
+          <div className="text-xl font-semibold">{pct>=40?'Great job! Keep it up!':'Keep practicing!'}</div>
+          <div className="text-white/80 mt-1">{title}</div>
+        </div>
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+          {[
+            [t('totalQuestions'),total,'📋','blue'],
+            [t('attempted'),attempted,'✏️','purple'],
+            [t('correctAns'),correct,'✅','green'],
+            [t('wrongAns'),wrong,'❌','red'],
+            [t('unanswered'),unanswered,'⬜','gray'],
+            [t('timeTaken'),fmtTime(timeTaken),'⏱️','orange'],
+          ].map(([label,value,icon,color])=>(
+            <Card key={label} className="text-center">
+              <div className="text-2xl mb-1">{icon}</div>
+              <div className={`text-2xl font-extrabold text-${color}-600 dark:text-${color}-400`}>{value}</div>
+              <div className={`text-xs text-gray-500 dark:text-gray-400 ${lang==='ta'?'tamil':''}`}>{label}</div>
+            </Card>
+          ))}
+        </div>
+        {/* Detailed review */}
+        <div>
+          <h3 className={`text-lg font-bold text-gray-900 dark:text-white mb-4 ${lang==='ta'?'tamil':''}`}>📋 {t('reviewAnswers')}</h3>
+          <div className="space-y-4">
+            {qs.map((q, idx) => {
+              const userAns = answers[q.id];
+              const isCorrect = userAns === q.correct_answer;
+              return (
+                <Card key={q.id} className={`border-l-4 ${isCorrect?'border-green-500':userAns?'border-red-400':'border-gray-300 dark:border-gray-600'}`}>
+                  <div className="flex items-start justify-between mb-2">
+                    <span className={`font-bold text-gray-500 dark:text-gray-400 text-sm`}>Q{idx+1}</span>
+                    <span>{isCorrect?'✅':userAns?'❌':'⬜'}</span>
+                  </div>
+                  <div className={`text-gray-900 dark:text-white font-medium mb-3 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?q.question_ta:q.question_en}</div>
+                  {!isCorrect && userAns && (
+                    <div className="text-sm mb-2 text-red-600 dark:text-red-400">
+                      <span className={`font-semibold ${lang==='ta'?'tamil':''}`}>{t('yourAnswer')}: </span>
+                      <span className={lang==='ta'?'tamil':''}>{lang==='ta'?q[`option_${userAns}_ta`]:q[`option_${userAns}_en`]}</span>
+                    </div>
+                  )}
+                  <div className="text-sm text-green-700 dark:text-green-400 mb-2">
+                    <span className={`font-semibold ${lang==='ta'?'tamil':''}`}>{t('correctAnswer')}: </span>
+                    <span className={lang==='ta'?'tamil':''}>{lang==='ta'?q[`option_${q.correct_answer}_ta`]:q[`option_${q.correct_answer}_en`]}</span>
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
+                    <span className={`font-semibold ${lang==='ta'?'tamil':''}`}>{t('explanation')}: </span>
+                    <span className={lang==='ta'?'tamil':''}>{lang==='ta'?q.explanation_ta:q.explanation_en}</span>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+        <div className="flex gap-3 flex-wrap">
+          <Button onClick={()=>{setAnswers({});setMarked({});setCurrent(0);setSubmitted(false);setTimeLeft(duration?duration*60:null);}}>{t('retake')}</Button>
+          {onFinish && <Button onClick={()=>onFinish({score,total,pct,timeTaken})} variant="secondary">← Back</Button>}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-6 fade-in">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <h2 className={`text-lg font-bold text-gray-900 dark:text-white ${lang==='ta'?'tamil':''}`}>{title}</h2>
+          <div className="text-sm text-gray-500 dark:text-gray-400">Q{current+1} of {total}</div>
+        </div>
+        <div className="flex items-center gap-3">
+          {timeLeft !== null && (
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-lg ${timeLeft<300?'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 timer-pulse':'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'}`}>
+              ⏱️ {fmtTime(timeLeft)}
+            </div>
+          )}
+          <button onClick={()=>setShowNav(!showNav)} className="px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200">
+            {showNav?'Hide':'Q Map'}
+          </button>
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mb-4">
+        <div className="flex gap-1">
+          {qs.map((_,i) => (
+            <div key={i} onClick={()=>setCurrent(i)} className={`h-2 flex-1 rounded-full cursor-pointer transition ${i===current?'bg-blue-500':answers[qs[i].id]?'bg-green-400':marked[qs[i].id]?'bg-yellow-400':'bg-gray-200 dark:bg-gray-600'}`}/>
+          ))}
+        </div>
+      </div>
+
+      {/* Question nav panel */}
+      {showNav && (
+        <Card className="mb-4">
+          <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">{t('questionNav')}</div>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {qs.map((_,i) => (
+              <button key={i} onClick={()=>{setCurrent(i);setShowNav(false);}} className={`w-9 h-9 rounded-lg text-sm font-bold transition ${i===current?'bg-blue-600 text-white':answers[qs[i].id]?'bg-green-500 text-white':marked[qs[i].id]?'bg-yellow-400 text-white':'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}>{i+1}</button>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400">
+            <span><span className="inline-block w-3 h-3 bg-blue-600 rounded mr-1"></span>{t('answered')}: {attempted}</span>
+            <span><span className="inline-block w-3 h-3 bg-gray-200 dark:bg-gray-600 rounded mr-1"></span>{t('notAnswered')}: {unanswered}</span>
+            <span><span className="inline-block w-3 h-3 bg-yellow-400 rounded mr-1"></span>{t('markedReview')}: {Object.keys(marked).length}</span>
+          </div>
+        </Card>
+      )}
+
+      {/* Question */}
+      <Card className="mb-4">
+        <div className="flex items-center gap-2 mb-4">
+          <Badge color={q.category==='MAT'?'blue':'green'}>{q.category}</Badge>
+          <Badge color="gray">{q.subject}</Badge>
+          <Badge color="purple">{q.difficulty}</Badge>
+        </div>
+        <div className={`text-gray-900 dark:text-white font-medium text-base leading-relaxed mb-6 ${lang==='ta'?'tamil':''}`}>
+          {lang==='ta'?q.question_ta:q.question_en}
+        </div>
+        <div className="grid sm:grid-cols-2 gap-3">
+          {['a','b','c','d'].map(opt => {
+            const text = lang==='ta'?q[`option_${opt}_ta`]:q[`option_${opt}_en`];
+            const isSelected = answers[q.id]===opt;
+            return (
+              <button key={opt} onClick={()=>setAnswers(a=>({...a,[q.id]:opt}))}
+                className={`option-btn p-4 rounded-xl text-left text-sm font-medium border-2 transition ${isSelected?'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200':'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:border-blue-300 hover:bg-blue-50/50 dark:hover:border-blue-600'}`}>
+                <span className="font-bold mr-2">{opt.toUpperCase()}.</span>
+                {lang==='ta'?<span className="tamil">{text}</span>:text}
+              </button>
+            );
+          })}
+        </div>
+      </Card>
+
+      {/* Controls */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex gap-2">
+          <Button onClick={()=>setCurrent(c=>Math.max(0,c-1))} disabled={current===0} variant="secondary">← {t('previous')}</Button>
+          <Button onClick={()=>setMarked(m=>({...m,[q.id]:!m[q.id]}))} variant="secondary" size="sm">
+            {marked[q.id]?'🔖 Marked':'🔖 '+t('markReview')}
+          </Button>
+        </div>
+        <div className="flex gap-2">
+          {current < total-1 ? (
+            <Button onClick={()=>setCurrent(c=>c+1)}>{t('next')} →</Button>
+          ) : (
+            <Button onClick={()=>setSubmitted(true)} variant="success">{t('submitTest')}</Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// DAILY QUIZ PAGE
+// ============================================================
+function DailyQuizPage() {
+  const { t, lang, questions } = useApp();
+  const q = questions[0];
+  const [answer, setAnswer] = React.useState(null);
+  const [submitted, setSubmitted] = React.useState(false);
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 py-8 fade-in">
+      <div className="text-center mb-8">
+        <div className="text-5xl mb-3">🎯</div>
+        <h1 className={`text-3xl font-extrabold text-gray-900 dark:text-white ${lang==='ta'?'tamil':''}`}>{t('dailyQuiz')}</h1>
+        <p className={`text-gray-500 dark:text-gray-400 mt-2 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'இன்றைய சவால்':'Today\'s Challenge'} • {new Date().toLocaleDateString()}</p>
+      </div>
+
+      <Card>
+        <div className="flex items-center gap-2 mb-4">
+          <Badge color={q.category==='MAT'?'blue':'green'}>{q.category}</Badge>
+          <Badge color="gray">{q.subject}</Badge>
+          <Badge color="orange">{q.topic}</Badge>
+        </div>
+        <div className={`text-gray-900 dark:text-white font-medium text-lg mb-6 leading-relaxed ${lang==='ta'?'tamil':''}`}>
+          {lang==='ta'?q.question_ta:q.question_en}
+        </div>
+        <div className="grid sm:grid-cols-2 gap-3 mb-6">
+          {['a','b','c','d'].map(opt => {
+            const text = lang==='ta'?q[`option_${opt}_ta`]:q[`option_${opt}_en`];
+            const isSelected = answer===opt;
+            const isCorrect = opt===q.correct_answer;
+            let cls = 'border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:border-blue-300';
+            if (submitted) { if (isCorrect) cls='border-2 border-green-500 bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-200'; else if (isSelected) cls='border-2 border-red-400 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200'; }
+            else if (isSelected) cls='border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200';
+            return (
+              <button key={opt} onClick={()=>{if(!submitted)setAnswer(opt);}} className={`option-btn p-4 rounded-xl text-left text-sm font-medium ${cls}`}>
+                <span className="font-bold mr-2">{opt.toUpperCase()}.</span>{lang==='ta'?<span className="tamil">{text}</span>:text}
+              </button>
+            );
+          })}
+        </div>
+        {!submitted ? (
+          <Button onClick={()=>{if(answer)setSubmitted(true);}} disabled={!answer} size="lg" className="w-full">{t('submit')}</Button>
+        ) : (
+          <div className={`p-5 rounded-xl ${answer===q.correct_answer?'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700':'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700'}`}>
+            <div className={`font-bold text-xl mb-2 ${answer===q.correct_answer?'text-green-700 dark:text-green-400':'text-red-600 dark:text-red-400'}`}>
+              {answer===q.correct_answer?'✅ '+t('correct'):'❌ '+t('wrong')}
+            </div>
+            {answer!==q.correct_answer && (
+              <div className={`text-sm text-gray-700 dark:text-gray-300 mb-2 ${lang==='ta'?'tamil':''}`}>
+                <span className="font-semibold">{t('correctAnswer')}: </span>{lang==='ta'?q[`option_${q.correct_answer}_ta`]:q[`option_${q.correct_answer}_en`]}
+              </div>
+            )}
+            <div className={`text-sm text-gray-700 dark:text-gray-300 ${lang==='ta'?'tamil':''}`}>
+              <span className="font-semibold">{t('explanation')}: </span>{lang==='ta'?q.explanation_ta:q.explanation_en}
+            </div>
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+// ============================================================
+// STUDY MATERIALS PAGE
+// ============================================================
+function StudyMaterialsPage() {
+  const { t, lang, materials, nav } = useApp();
+  const [search, setSearch] = React.useState('');
+  const [subject, setSubject] = React.useState('all');
+  const [category, setCategory] = React.useState('all');
+  const [type, setType] = React.useState('all');
+
+  const filtered = materials.filter(m => m.published &&
+    (search==='' || (lang==='ta'?m.title_ta:m.title_en).toLowerCase().includes(search.toLowerCase())) &&
+    (subject==='all' || m.subject===subject) &&
+    (category==='all' || m.category===category) &&
+    (type==='all' || m.type===type)
+  );
+
+  const subjectOptions = [
+    {value:'all',label:t('all')}, {value:'Mental Ability',label:t('mentalAbility')}, {value:'Mathematics',label:t('mathematics')},
+    {value:'Science',label:t('science')}, {value:'Social Science',label:t('socialScience')}, {value:'Language',label:t('language')}
+  ];
+  const typeColors = { PDF:'blue', Notes:'green', Video:'purple', Quiz:'orange' };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 fade-in">
+      <div className="mb-8">
+        <h1 className={`text-3xl font-extrabold text-gray-900 dark:text-white mb-2 ${lang==='ta'?'tamil':''}`}>📚 {t('studyMaterials')}</h1>
+        <p className={`text-gray-500 dark:text-gray-400 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'உங்கள் NMMS தயாரிப்பிற்கான பொருட்கள்':'Resources for your NMMS preparation'}</p>
+      </div>
+      {/* Filters */}
+      <Card className="mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('search')} className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/></div>
+          <Select value={subject} onChange={setSubject} options={subjectOptions}/>
+          <Select value={category} onChange={setCategory} options={[{value:'all',label:'MAT & SAT'},{value:'MAT',label:'MAT'},{value:'SAT',label:'SAT'}]}/>
+          <Select value={type} onChange={setType} options={[{value:'all',label:'All Types'},{value:'PDF',label:'PDF'},{value:'Notes',label:'Notes'},{value:'Video',label:'Video'},{value:'Quiz',label:'Quiz'}]}/>
+        </div>
+      </Card>
+      {filtered.length === 0 ? (
+        <div className="text-center py-16"><div className="text-6xl mb-4">📭</div><div className={`text-xl font-bold text-gray-500 dark:text-gray-400 ${lang==='ta'?'tamil':''}`}>{t('noData')}</div></div>
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {filtered.map(m => (
+            <Card key={m.id} className="flex flex-col">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-2xl">{m.thumbnail}</div>
+                <Badge color={typeColors[m.type]||'gray'}>{m.type}</Badge>
+              </div>
+              <div className={`font-bold text-gray-900 dark:text-white mb-1 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?m.title_ta:m.title_en}</div>
+              <div className={`text-xs text-gray-500 dark:text-gray-400 mb-3 flex-1 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?m.description_ta:m.description_en}</div>
+              <div className="flex flex-wrap gap-1 mb-3">
+                <Badge color="blue">{m.category}</Badge>
+                <Badge color="gray">{m.subject}</Badge>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" className="flex-1" onClick={()=>nav('practiceQuiz',{questions:demoQuestions.filter(q=>q.subject===m.subject).slice(0,5),title:lang==='ta'?m.title_ta:m.title_en})}>👁️ {t('view')}</Button>
+                {m.type==='PDF' && <Button size="sm" variant="secondary" onClick={()=>alert('PDF download would open here')}>⬇️</Button>}
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// MOCK TESTS PAGE
+// ============================================================
+function MockTestsPage() {
+  const { t, lang, mockTests, questions: allQ, updateProgress } = useApp();
+  const [selected, setSelected] = React.useState(null);
+  const [phase, setPhase] = React.useState('list'); // list, instructions, test
+
+  if (phase === 'test' && selected) {
+    const testQs = selected.questions.map(id => allQ.find(q=>q.id===id)).filter(Boolean);
+    return <QuizEngine questions={testQs} title={lang==='ta'?selected.title_ta:selected.title_en} duration={selected.duration} lang={lang} t={t} onFinish={(r)=>{updateProgress('test',r.pct);setPhase('list');setSelected(null);}}/>;
+  }
+
+  if (phase === 'instructions' && selected) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-10 fade-in">
+        <Card>
+          <div className="text-center mb-6">
+            <div className="text-5xl mb-3">📝</div>
+            <h1 className={`text-2xl font-extrabold text-gray-900 dark:text-white mb-2 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?selected.title_ta:selected.title_en}</h1>
+            <p className={`text-gray-500 dark:text-gray-400 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?selected.description_ta:selected.description_en}</p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            {[[t('totalQuestions'),selected.total_questions,'📋'],[t('duration'),selected.duration+' mins','⏱️'],[t('totalMarks'),selected.total_questions*selected.marks,'🏆'],[t('negativeMarking'),selected.negative_marks||'None','➖']].map(([l,v,i])=>(
+              <div key={l} className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 text-center">
+                <div className="text-2xl mb-1">{i}</div>
+                <div className="text-xl font-bold text-blue-700 dark:text-blue-300">{v}</div>
+                <div className={`text-xs text-gray-500 dark:text-gray-400 ${lang==='ta'?'tamil':''}`}>{l}</div>
+              </div>
+            ))}
+          </div>
+          <div className={`bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl p-4 mb-6 ${lang==='ta'?'tamil':''}`}>
+            <div className="font-bold text-yellow-800 dark:text-yellow-300 mb-2">📌 {t('instructions')}</div>
+            <ul className="text-sm text-yellow-700 dark:text-yellow-400 space-y-1 list-disc list-inside">
+              <li>{lang==='ta'?'ஒவ்வொரு வினாவிற்கும் ஒரே ஒரு சரியான விடை மட்டுமே உள்ளது':'Each question has only one correct answer'}</li>
+              <li>{lang==='ta'?'தேர்வு நேரம் முடிந்தவுடன் தானாகவே சமர்ப்பிக்கப்படும்':'Test auto-submits when time runs out'}</li>
+              <li>{lang==='ta'?'வினாக்களை மதிப்பாய்வுக்காக குறியிடலாம்':'You can mark questions for review'}</li>
+              <li>{lang==='ta'?'சமர்ப்பித்த பிறகு விடைகளை மாற்ற முடியாது':'Answers cannot be changed after submission'}</li>
+            </ul>
+          </div>
+          <div className="flex gap-3">
+            <Button onClick={()=>setPhase('list')} variant="secondary">← Back</Button>
+            <Button onClick={()=>setPhase('test')} className="flex-1" size="lg">{t('startTest')} 🚀</Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 fade-in">
+      <div className="mb-8">
+        <h1 className={`text-3xl font-extrabold text-gray-900 dark:text-white mb-2 ${lang==='ta'?'tamil':''}`}>📝 {t('mockTests')}</h1>
+        <p className={`text-gray-500 dark:text-gray-400 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'NMMS தேர்வு மாதிரியில் பயிற்சி பெறுங்கள்':'Practice in NMMS exam format'}</p>
+      </div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {mockTests.filter(t=>t.status==='published').map(test => (
+          <Card key={test.id} className="flex flex-col">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-14 h-14 bg-purple-50 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center text-3xl">📝</div>
+              <Badge color="purple">{t('published')}</Badge>
+            </div>
+            <h3 className={`text-lg font-bold text-gray-900 dark:text-white mb-2 flex-1 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?test.title_ta:test.title_en}</h3>
+            <p className={`text-sm text-gray-500 dark:text-gray-400 mb-4 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?test.description_ta:test.description_en}</p>
+            <div className="flex gap-3 text-xs text-gray-500 dark:text-gray-400 mb-4">
+              <span>📋 {test.total_questions} Qs</span>
+              <span>⏱️ {test.duration} min</span>
+              <span>🏆 {test.total_questions} marks</span>
+            </div>
+            <Button onClick={()=>{setSelected(test);setPhase('instructions');}} className="w-full">{t('startTest')}</Button>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// PREVIOUS PAPERS PAGE
+// ============================================================
+function PreviousYearsPage() {
+  const { t, lang, previousPapers, questions: allQ } = useApp();
+  const [yearFilter, setYearFilter] = React.useState('all');
+  const [catFilter, setCatFilter] = React.useState('all');
+  const [selected, setSelected] = React.useState(null);
+
+  const years = [...new Set(previousPapers.map(p=>p.year))].sort((a,b)=>b-a);
+  const filtered = previousPapers.filter(p => (yearFilter==='all'||p.year==yearFilter) && (catFilter==='all'||p.category===catFilter));
+
+  if (selected) {
+    const testQs = selected.questions.map(id=>allQ.find(q=>q.id===id)).filter(Boolean);
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-6 fade-in">
+        <button onClick={()=>setSelected(null)} className="text-blue-600 font-semibold mb-4 flex items-center gap-1 hover:underline">← {t('previousPapers')}</button>
+        <div className="mb-6"><h2 className="text-xl font-bold text-gray-900 dark:text-white">{selected.title}</h2></div>
+        <div className="space-y-6">
+          {testQs.map((q, idx) => (
+            <Card key={q.id}>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold text-sm">{idx+1}</span>
+                <Badge color={q.category==='MAT'?'blue':'green'}>{q.category}</Badge>
+                <Badge color="gray">{q.subject}</Badge>
+              </div>
+              <div className={`text-gray-900 dark:text-white font-medium mb-4 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?q.question_ta:q.question_en}</div>
+              <div className="grid sm:grid-cols-2 gap-2 mb-4">
+                {['a','b','c','d'].map(opt=>(
+                  <div key={opt} className={`p-3 rounded-xl text-sm border-2 ${opt===q.correct_answer?'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200':'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300'}`}>
+                    <span className="font-bold mr-2">{opt.toUpperCase()}.</span>{lang==='ta'?<span className="tamil">{q[`option_${opt}_ta`]}</span>:q[`option_${opt}_en`]}
+                    {opt===q.correct_answer && <span className="ml-2 text-green-600 font-bold">✓</span>}
+                  </div>
+                ))}
+              </div>
+              <div className={`bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 p-3 rounded-xl text-sm text-yellow-800 dark:text-yellow-300 ${lang==='ta'?'tamil':''}`}>
+                💡 {lang==='ta'?q.explanation_ta:q.explanation_en}
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 fade-in">
+      <div className="mb-8">
+        <h1 className={`text-3xl font-extrabold text-gray-900 dark:text-white mb-2 ${lang==='ta'?'tamil':''}`}>📅 {t('previousPapers')}</h1>
+        <p className={`text-gray-500 dark:text-gray-400 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'முந்தைய ஆண்டு வினாத்தாள்கள் - 2018 முதல் 2023 வரை':'Previous year question papers - 2018 to 2023'}</p>
+      </div>
+      <Card className="mb-6">
+        <div className="flex flex-wrap gap-3">
+          <Select value={yearFilter} onChange={setYearFilter} options={[{value:'all',label:'All Years'},...years.map(y=>({value:y,label:y}))]}/>
+          <Select value={catFilter} onChange={setCatFilter} options={[{value:'all',label:'MAT & SAT'},{value:'MAT',label:'MAT - Mental Ability'},{value:'SAT',label:'SAT - Scholastic Aptitude'}]}/>
+        </div>
+      </Card>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filtered.map(p => (
+          <Card key={p.id} onClick={()=>setSelected(p)} className="cursor-pointer">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-12 h-12 bg-orange-50 dark:bg-orange-900/20 rounded-xl flex items-center justify-center text-2xl">📄</div>
+              <Badge color={p.category==='MAT'?'blue':'green'}>{p.category}</Badge>
+            </div>
+            <h3 className="font-bold text-gray-900 dark:text-white mb-2">{p.title}</h3>
+            <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-3">
+              <span>📅 {p.year}</span>
+              <span>📋 {p.questions.length} Questions</span>
+            </div>
+            <Button size="sm" className="w-full">{t('view')} Questions →</Button>
+          </Card>
+        ))}
+      </div>
+      {/* PDF Downloads section */}
+      <Card className="mt-8">
+        <h3 className={`font-bold text-gray-900 dark:text-white mb-4 ${lang==='ta'?'tamil':''}`}>📥 {lang==='ta'?'PDF வினாத்தாள்கள் பதிவிறக்கம்':'PDF Paper Downloads'}</h3>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {['2023 MAT','2023 SAT','2022 MAT','2022 SAT','2021 MAT','2021 SAT','2020 MAT+SAT','2019 MAT','2019 SAT','2018 MAT','2018 SAT'].map(paper => (
+            <div key={paper} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+              <span className="text-sm font-medium text-gray-800 dark:text-gray-200">NMMS TN {paper}</span>
+              <button onClick={()=>alert('PDF files are in the NMMS folder on your Desktop')} className="text-blue-600 hover:text-blue-700 text-sm font-semibold">⬇️ PDF</button>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+// ============================================================
+// STUDENT DASHBOARD
+// ============================================================
+function ProgressPage() {
+  const { t, lang, user, nav, progress } = useApp();
+
+  if (!user) {
+    return (
+      <div className="max-w-lg mx-auto px-4 py-16 text-center fade-in">
+        <div className="text-6xl mb-4">🔐</div>
+        <h2 className={`text-2xl font-bold text-gray-900 dark:text-white mb-3 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'தயவுசெய்து உள்நுழையவும்':'Please Login First'}</h2>
+        <p className={`text-gray-500 dark:text-gray-400 mb-6 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'உங்கள் முன்னேற்றத்தை பார்க்க உள்நுழைக':'Login to view your progress'}</p>
+        <Button onClick={()=>nav('login')} size="lg">{t('login')}</Button>
+      </div>
+    );
+  }
+
+  const subjects = [
+    {key:'mat',label:'MAT - Mental Ability',color:'blue',icon:'🧠',value:progress.mat},
+    {key:'mathematics',label:t('mathematics'),color:'green',icon:'📐',value:progress.mathematics},
+    {key:'science',label:t('science'),color:'purple',icon:'🔬',value:progress.science},
+    {key:'socialScience',label:t('socialScience'),color:'orange',icon:'🌍',value:progress.socialScience},
+    {key:'sat',label:'SAT Overall',color:'red',icon:'📊',value:progress.sat},
+  ];
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-8 fade-in">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-6 mb-8 text-white">
+        <div className="flex items-start justify-between flex-wrap gap-4">
+          <div>
+            <div className={`text-lg font-semibold text-blue-200 ${lang==='ta'?'tamil':''}`}>{t('welcomeBack')},</div>
+            <div className="text-3xl font-extrabold">{user.name}</div>
+            <div className="text-blue-200 text-sm mt-1">{user.school} • {user.district}</div>
+          </div>
+          <div className="flex gap-3">
+            <div className="bg-white/20 rounded-xl p-4 text-center">
+              <div className="text-3xl font-bold">{progress.streak || 0}</div>
+              <div className={`text-blue-200 text-xs ${lang==='ta'?'tamil':''}`}>{t('streakDays')}</div>
+            </div>
+            <div className="bg-white/20 rounded-xl p-4 text-center">
+              <div className="text-3xl font-bold">{user.badges?.length || 0}</div>
+              <div className={`text-blue-200 text-xs ${lang==='ta'?'tamil':''}`}>{t('badges')}</div>
+            </div>
+          </div>
+        </div>
+        {user.badges?.length > 0 && <div className="mt-4 flex gap-2">{user.badges.map((b,i)=><span key={i} className="text-2xl">{b}</span>)}</div>}
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        {[
+          [t('testsTaken'),progress.testsTaken,'📝','blue'],
+          [t('quizAttempts'),progress.quizAttempts,'🎯','purple'],
+          [t('avgScore'),progress.avgScore+'%','📊','green'],
+          [t('highestScore'),progress.highestScore+'%','🏆','orange'],
+          [t('questionsAttempted'),progress.questionsAttempted,'✏️','red'],
+          [t('materialsViewed'),progress.materialsViewed,'📚','gray'],
+        ].map(([l,v,i,c])=>(
+          <Card key={l} className="text-center">
+            <div className="text-3xl mb-2">{i}</div>
+            <div className={`text-2xl font-extrabold text-${c}-600 dark:text-${c}-400`}>{v}</div>
+            <div className={`text-xs text-gray-500 dark:text-gray-400 mt-1 ${lang==='ta'?'tamil':''}`}>{l}</div>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Subject Progress */}
+        <div className="lg:col-span-2">
+          <Card>
+            <h3 className={`font-bold text-gray-900 dark:text-white mb-5 text-lg ${lang==='ta'?'tamil':''}`}>📊 {t('subjectProgress')}</h3>
+            <div className="space-y-5">
+              {subjects.map(s => (
+                <div key={s.key}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className={`text-sm font-medium text-gray-700 dark:text-gray-300 ${lang==='ta'?'tamil':''}`}>{s.icon} {s.label}</span>
+                    <span className={`text-sm font-bold text-${s.color}-600 dark:text-${s.color}-400`}>{s.value}%</span>
+                  </div>
+                  <ProgressBar value={s.value} color={s.color}/>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+        {/* Recent Activity */}
+        <div>
+          <Card>
+            <h3 className={`font-bold text-gray-900 dark:text-white mb-4 ${lang==='ta'?'tamil':''}`}>🕐 {t('recentActivity')}</h3>
+            <div className="space-y-3">
+              {progress.recentActivity?.map((a,i) => (
+                <div key={i} className="flex gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                  <span className="text-xl">{a.type==='test'?'📝':a.type==='quiz'?'🎯':'📚'}</span>
+                  <div>
+                    <div className="text-sm text-gray-800 dark:text-gray-200 font-medium">{a.text}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{a.date}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+          {/* Weak Topics */}
+          <Card className="mt-4">
+            <h3 className={`font-bold text-gray-900 dark:text-white mb-3 ${lang==='ta'?'tamil':''}`}>⚠️ {t('weakTopics')}</h3>
+            <div className="space-y-2">
+              {['Number Series','Percentage','Cell Biology'].map(topic=>(
+                <div key={topic} className="flex items-center justify-between p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                  <span className="text-sm text-red-700 dark:text-red-400">{topic}</span>
+                  <button onClick={()=>nav('studyMaterials')} className="text-xs text-blue-600 font-semibold hover:underline">Practice →</button>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// ANNOUNCEMENTS PAGE
+// ============================================================
+function AnnouncementsPage() {
+  const { t, lang, announcements } = useApp();
+  const icons = { exam:'🎓', material:'📚', test:'📝', general:'📢' };
+  const colors = { exam:'blue', material:'green', test:'purple', general:'orange' };
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-8 fade-in">
+      <h1 className={`text-3xl font-extrabold text-gray-900 dark:text-white mb-2 ${lang==='ta'?'tamil':''}`}>📢 {t('announcements')}</h1>
+      <p className={`text-gray-500 dark:text-gray-400 mb-8 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'சமீபத்திய புதுப்பிப்புகள் மற்றும் அறிவிப்புகள்':'Latest updates and notifications'}</p>
+      <div className="space-y-4">
+        {announcements.filter(a=>a.published).map(a => (
+          <Card key={a.id} className={`border-l-4 border-${colors[a.type]||'blue'}-500`}>
+            <div className="flex items-start gap-4">
+              <div className={`w-12 h-12 bg-${colors[a.type]||'blue'}-50 dark:bg-${colors[a.type]||'blue'}-900/20 rounded-xl flex items-center justify-center text-2xl flex-shrink-0`}>{icons[a.type]||'📢'}</div>
+              <div className="flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className={`font-bold text-gray-900 dark:text-white ${lang==='ta'?'tamil':''}`}>{lang==='ta'?a.title_ta:a.title_en}</h3>
+                  <Badge color={colors[a.type]||'blue'}>{a.type}</Badge>
+                </div>
+                <p className={`text-gray-600 dark:text-gray-400 text-sm mt-2 leading-relaxed ${lang==='ta'?'tamil':''}`}>{lang==='ta'?a.description_ta:a.description_en}</p>
+                <div className="text-xs text-gray-400 mt-2 flex items-center gap-1">📅 {a.date}</div>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// PRACTICE QUIZ PAGE (generic)
+// ============================================================
+function PracticeQuizPage() {
+  const { t, lang, questions, pageData } = useApp();
+  const qs = pageData?.questions || questions.slice(0,10);
+  const title = pageData?.title || (lang==='ta'?'பயிற்சி வினாடி வினா':'Practice Quiz');
+  return <QuizEngine questions={qs} title={title} duration={null} lang={lang} t={t} onFinish={null}/>;
+}
+
+// ============================================================
+// ADMIN DASHBOARD
+// ============================================================
+function AdminDashboard() {
+  const { t, lang, user, nav, questions, setQuestions, materials, setMaterials, mockTests, setMockTests, announcements, setAnnouncements, users, previousPapers, setPreviousPapers } = useApp();
+  const [activeTab, setActiveTab] = React.useState('dashboard');
+  const [toast, setToast] = React.useState(null);
+  const [modal, setModal] = React.useState(null);
+  const showToast = (msg, type='success') => setToast({msg,type});
+
+  if (!user || user.role !== 'admin') {
+    return <div className="text-center py-20"><div className="text-6xl mb-4">🚫</div><h2 className="text-2xl font-bold text-gray-900 dark:text-white">Admin access only</h2><Button onClick={()=>nav('login')} className="mt-4">Login as Admin</Button></div>;
+  }
+
+  const sidebarLinks = [
+    {key:'dashboard',icon:'📊',label:'Dashboard'}, {key:'materials',icon:'📚',label:'Study Materials'}, {key:'questions',icon:'❓',label:'Question Bank'}, {key:'quizzes',icon:'🎯',label:'Daily Quiz'}, {key:'tests',icon:'📝',label:'Mock Tests'}, {key:'papers',icon:'📅',label:'Previous Papers'}, {key:'announcements',icon:'📢',label:'Announcements'}, {key:'students',icon:'👥',label:'Students'},
+  ];
+
+  const stats = [
+    ['👥', users.filter(u=>u.role==='student').length, 'Students', 'blue'],
+    ['📚', materials.length, 'Materials', 'green'],
+    ['❓', questions.length, 'Questions', 'purple'],
+    ['📝', mockTests.length, 'Mock Tests', 'orange'],
+    ['📢', announcements.filter(a=>a.published).length, 'Published', 'red'],
+    ['📅', previousPapers.length, 'Papers', 'gray'],
+  ];
+
+  // Question form state
+  const [qForm, setQForm] = React.useState({ question_en:'', question_ta:'', option_a_en:'', option_a_ta:'', option_b_en:'', option_b_ta:'', option_c_en:'', option_c_ta:'', option_d_en:'', option_d_ta:'', correct_answer:'a', explanation_en:'', explanation_ta:'', category:'MAT', subject:'Mental Ability', topic:'', difficulty:'easy', year:2024, medium:'both' });
+  const setQF = k => v => setQForm(f=>({...f,[k]:v}));
+  const saveQuestion = () => { const q = {...qForm, id: Date.now()}; setQuestions(prev=>[...prev,q]); setModal(null); showToast('Question added!'); };
+
+  // Material form state
+  const [mForm, setMForm] = React.useState({ title_en:'', title_ta:'', description_en:'', description_ta:'', subject:'Mathematics', category:'SAT', type:'PDF', medium:'both', topic:'', thumbnail:'📚', published:true });
+  const setMF = k => v => setMForm(f=>({...f,[k]:v}));
+  const saveMaterial = () => { const m = {...mForm, id: Date.now()}; setMaterials(prev=>[...prev,m]); setModal(null); showToast('Material added!'); };
+
+  // Announcement form
+  const [aForm, setAForm] = React.useState({ title_en:'', title_ta:'', description_en:'', description_ta:'', date: new Date().toISOString().split('T')[0], type:'general', published:true });
+  const setAF = k => v => setAForm(f=>({...f,[k]:v}));
+  const saveAnn = () => { const a = {...aForm, id: Date.now()}; setAnnouncements(prev=>[...prev,a]); setModal(null); showToast('Announcement published!'); };
+
+  const renderTab = () => {
+    switch(activeTab) {
+      case 'dashboard':
+        return (
+          <div className="fade-in space-y-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📊 Admin Dashboard</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              {stats.map(([icon,val,label,color])=>(
+                <Card key={label} className="text-center">
+                  <div className="text-3xl mb-2">{icon}</div>
+                  <div className={`text-3xl font-extrabold text-${color}-600 dark:text-${color}-400`}>{val}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{label}</div>
+                </Card>
+              ))}
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Card>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-3">Quick Actions</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button onClick={()=>setModal('question')} variant="secondary" className="text-left">➕ Add Question</Button>
+                  <Button onClick={()=>setModal('material')} variant="secondary" className="text-left">📚 Add Material</Button>
+                  <Button onClick={()=>setModal('announcement')} variant="secondary" className="text-left">📢 Announcement</Button>
+                  <Button onClick={()=>setActiveTab('tests')} variant="secondary" className="text-left">📝 Mock Test</Button>
+                </div>
+              </Card>
+              <Card>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-3">Recent Questions</h3>
+                <div className="space-y-2">
+                  {questions.slice(-3).map(q=>(
+                    <div key={q.id} className="text-sm text-gray-600 dark:text-gray-400 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg truncate">{q.question_en}</div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+          </div>
+        );
+
+      case 'questions':
+        return (
+          <div className="fade-in space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">❓ Question Bank ({questions.length})</h2>
+              <Button onClick={()=>setModal('question')}>➕ Add Question</Button>
+            </div>
+            <div className="space-y-3">
+              {questions.map((q,i)=>(
+                <Card key={q.id}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex gap-2 mb-1">
+                        <Badge color={q.category==='MAT'?'blue':'green'}>{q.category}</Badge>
+                        <Badge color="gray">{q.subject}</Badge>
+                        <Badge color="purple">{q.difficulty}</Badge>
+                      </div>
+                      <div className="text-gray-900 dark:text-white font-medium text-sm">{q.question_en}</div>
+                      <div className="text-gray-400 text-xs mt-1">Correct: {q[`option_${q.correct_answer}_en`]}</div>
+                    </div>
+                    <button onClick={()=>{setQuestions(prev=>prev.filter(x=>x.id!==q.id));showToast('Deleted','error');}} className="text-red-400 hover:text-red-600 text-sm px-2 py-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg">🗑️</button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'materials':
+        return (
+          <div className="fade-in space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📚 Study Materials ({materials.length})</h2>
+              <Button onClick={()=>setModal('material')}>➕ Add Material</Button>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {materials.map(m=>(
+                <Card key={m.id}>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1">
+                      <div className="flex gap-2 mb-1"><Badge color="blue">{m.category}</Badge><Badge color="gray">{m.type}</Badge><Badge color={m.published?'green':'gray'}>{m.published?t('published'):t('draft')}</Badge></div>
+                      <div className="font-bold text-gray-900 dark:text-white text-sm">{m.title_en}</div>
+                      <div className="text-gray-400 text-xs mt-1">{m.subject} • {m.topic}</div>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <button onClick={()=>{setMaterials(prev=>prev.map(x=>x.id===m.id?{...x,published:!x.published}:x));showToast('Updated');}} className="text-xs text-blue-600 hover:underline">{m.published?'Unpublish':'Publish'}</button>
+                      <button onClick={()=>{setMaterials(prev=>prev.filter(x=>x.id!==m.id));showToast('Deleted','error');}} className="text-xs text-red-500 hover:underline">Delete</button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'announcements':
+        return (
+          <div className="fade-in space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📢 Announcements</h2>
+              <Button onClick={()=>setModal('announcement')}>➕ Add Announcement</Button>
+            </div>
+            <div className="space-y-3">
+              {announcements.map(a=>(
+                <Card key={a.id}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="flex gap-2 mb-1"><Badge color="blue">{a.type}</Badge><Badge color={a.published?'green':'gray'}>{a.published?'Published':'Draft'}</Badge></div>
+                      <div className="font-bold text-gray-900 dark:text-white text-sm">{a.title_en}</div>
+                      <div className="text-gray-400 text-xs mt-1">{a.date}</div>
+                    </div>
+                    <button onClick={()=>{setAnnouncements(prev=>prev.filter(x=>x.id!==a.id));showToast('Deleted','error');}} className="text-red-400 hover:text-red-600">🗑️</button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'students':
+        return (
+          <div className="fade-in space-y-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">👥 Students ({users.filter(u=>u.role==='student').length})</h2>
+            <div className="space-y-3">
+              {users.filter(u=>u.role==='student').map(u=>(
+                <Card key={u.id}>
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold">{u.name[0]}</div>
+                    <div>
+                      <div className="font-bold text-gray-900 dark:text-white">{u.name}</div>
+                      <div className="text-sm text-gray-400">{u.email} • {u.school || 'School not set'} • {u.district || 'District not set'}</div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'tests':
+        return (
+          <div className="fade-in space-y-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📝 Mock Tests ({mockTests.length})</h2>
+            <div className="space-y-3">
+              {mockTests.map(test=>(
+                <Card key={test.id}>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <Badge color={test.status==='published'?'green':'gray'}>{test.status}</Badge>
+                      <div className="font-bold text-gray-900 dark:text-white mt-1">{test.title_en}</div>
+                      <div className="text-sm text-gray-400">{test.total_questions} Questions • {test.duration} min</div>
+                    </div>
+                    <button onClick={()=>{setMockTests(prev=>prev.map(x=>x.id===test.id?{...x,status:x.status==='published'?'draft':'published'}:x));showToast('Updated');}} className="text-blue-600 text-sm hover:underline">{test.status==='published'?'Unpublish':'Publish'}</button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'papers':
+        return (
+          <div className="fade-in space-y-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">📅 Previous Papers ({previousPapers.length})</h2>
+            <div className="space-y-3">
+              {previousPapers.map(p=>(
+                <Card key={p.id}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Badge color={p.category==='MAT'?'blue':'green'}>{p.category}</Badge>
+                      <div className="font-bold text-gray-900 dark:text-white mt-1">{p.title}</div>
+                      <div className="text-sm text-gray-400">Year: {p.year} • {p.questions.length} Questions</div>
+                    </div>
+                    <button onClick={()=>{setPreviousPapers(prev=>prev.filter(x=>x.id!==p.id));showToast('Deleted','error');}} className="text-red-400 hover:text-red-600">🗑️</button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'quizzes':
+        return (
+          <div className="fade-in space-y-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">🎯 Daily Quiz</h2>
+            <Card>
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">Current daily quiz question:</div>
+              <div className="font-medium text-gray-900 dark:text-white">{questions[0]?.question_en}</div>
+              <div className="text-sm text-green-600 mt-2">✓ Correct: {questions[0]?.[`option_${questions[0]?.correct_answer}_en`]}</div>
+              <Button className="mt-4" variant="secondary" size="sm">Change Today's Question</Button>
+            </Card>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="flex min-h-[calc(100vh-4rem)] fade-in">
+      {/* Sidebar */}
+      <aside className="w-16 lg:w-56 bg-gray-900 dark:bg-gray-950 flex flex-col flex-shrink-0">
+        <div className="p-3 lg:p-4 border-b border-gray-700">
+          <div className="hidden lg:block text-white font-bold text-sm">Admin Panel</div>
+          <div className="text-gray-400 text-xs hidden lg:block">NMMS Tamil Nadu</div>
+        </div>
+        <nav className="flex-1 py-3">
+          {sidebarLinks.map(l=>(
+            <button key={l.key} onClick={()=>setActiveTab(l.key)} className={`sidebar-link w-full flex items-center gap-3 px-3 py-3 lg:px-4 text-left ${activeTab===l.key?'active':'text-gray-400'}`}>
+              <span className="text-xl flex-shrink-0">{l.icon}</span>
+              <span className="hidden lg:block text-sm font-medium">{l.label}</span>
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Main */}
+      <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
+        <div className="p-4 lg:p-8">{renderTab()}</div>
+      </main>
+
+      {/* Question Modal */}
+      <Modal open={modal==='question'} onClose={()=>setModal(null)} title="Add Question">
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <Select label="Category" value={qForm.category} onChange={v=>{setQF('category')(v);setQF('subject')(v==='MAT'?'Mental Ability':'Mathematics');}} options={[{value:'MAT',label:'MAT'},{value:'SAT',label:'SAT'}]}/>
+            <Select label="Subject" value={qForm.subject} onChange={setQF('subject')} options={qForm.category==='MAT'?[{value:'Mental Ability',label:'Mental Ability'}]:[{value:'Mathematics',label:'Mathematics'},{value:'Science',label:'Science'},{value:'Social Science',label:'Social Science'},{value:'Language',label:'Language'}]}/>
+          </div>
+          <Input label="Question (English)" value={qForm.question_en} onChange={setQF('question_en')} placeholder="Enter question in English"/>
+          <Input label="Question (Tamil)" value={qForm.question_ta} onChange={setQF('question_ta')} placeholder="தமிழில் வினா உள்ளிடவும்"/>
+          <div className="grid grid-cols-2 gap-3">
+            <Input label="Option A (En)" value={qForm.option_a_en} onChange={setQF('option_a_en')}/>
+            <Input label="Option A (Ta)" value={qForm.option_a_ta} onChange={setQF('option_a_ta')}/>
+            <Input label="Option B (En)" value={qForm.option_b_en} onChange={setQF('option_b_en')}/>
+            <Input label="Option B (Ta)" value={qForm.option_b_ta} onChange={setQF('option_b_ta')}/>
+            <Input label="Option C (En)" value={qForm.option_c_en} onChange={setQF('option_c_en')}/>
+            <Input label="Option C (Ta)" value={qForm.option_c_ta} onChange={setQF('option_c_ta')}/>
+            <Input label="Option D (En)" value={qForm.option_d_en} onChange={setQF('option_d_en')}/>
+            <Input label="Option D (Ta)" value={qForm.option_d_ta} onChange={setQF('option_d_ta')}/>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <Select label="Correct Answer" value={qForm.correct_answer} onChange={setQF('correct_answer')} options={['a','b','c','d'].map(x=>({value:x,label:`Option ${x.toUpperCase()}`}))}/>
+            <Select label="Difficulty" value={qForm.difficulty} onChange={setQF('difficulty')} options={[{value:'easy',label:'Easy'},{value:'medium',label:'Medium'},{value:'hard',label:'Hard'}]}/>
+            <Input label="Year" type="number" value={qForm.year} onChange={setQF('year')}/>
+          </div>
+          <Input label="Explanation (English)" value={qForm.explanation_en} onChange={setQF('explanation_en')} placeholder="Detailed explanation in English"/>
+          <Input label="Explanation (Tamil)" value={qForm.explanation_ta} onChange={setQF('explanation_ta')} placeholder="தமிழில் விளக்கம்"/>
+          <Input label="Topic" value={qForm.topic} onChange={setQF('topic')}/>
+          <div className="flex gap-3 pt-2">
+            <Button onClick={saveQuestion} className="flex-1">Save Question</Button>
+            <Button onClick={()=>setModal(null)} variant="secondary">Cancel</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Material Modal */}
+      <Modal open={modal==='material'} onClose={()=>setModal(null)} title="Add Study Material">
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <Select label="Category" value={mForm.category} onChange={setMF('category')} options={[{value:'MAT',label:'MAT'},{value:'SAT',label:'SAT'}]}/>
+            <Select label="Subject" value={mForm.subject} onChange={setMF('subject')} options={[{value:'Mental Ability',label:'Mental Ability'},{value:'Mathematics',label:'Mathematics'},{value:'Science',label:'Science'},{value:'Social Science',label:'Social Science'},{value:'Language',label:'Language'}]}/>
+          </div>
+          <Input label="Title (English)" value={mForm.title_en} onChange={setMF('title_en')} placeholder="Material title in English"/>
+          <Input label="Title (Tamil)" value={mForm.title_ta} onChange={setMF('title_ta')} placeholder="தமிழில் தலைப்பு"/>
+          <Input label="Description (English)" value={mForm.description_en} onChange={setMF('description_en')} placeholder="Brief description"/>
+          <Input label="Description (Tamil)" value={mForm.description_ta} onChange={setMF('description_ta')} placeholder="தமிழில் விளக்கம்"/>
+          <div className="grid grid-cols-2 gap-3">
+            <Select label="Type" value={mForm.type} onChange={setMF('type')} options={[{value:'PDF',label:'PDF'},{value:'Notes',label:'Notes'},{value:'Video',label:'Video'},{value:'Quiz',label:'Quiz'}]}/>
+            <Select label="Medium" value={mForm.medium} onChange={setMF('medium')} options={[{value:'both',label:'Both'},{value:'tamil',label:'Tamil'},{value:'english',label:'English'}]}/>
+          </div>
+          <Input label="Topic" value={mForm.topic} onChange={setMF('topic')} placeholder="e.g. Algebra, Cell Biology"/>
+          <Input label="Thumbnail (emoji)" value={mForm.thumbnail} onChange={setMF('thumbnail')} placeholder="📚"/>
+          <div className="flex gap-3 pt-2">
+            <Button onClick={saveMaterial} className="flex-1">Save Material</Button>
+            <Button onClick={()=>setModal(null)} variant="secondary">Cancel</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Announcement Modal */}
+      <Modal open={modal==='announcement'} onClose={()=>setModal(null)} title="Add Announcement">
+        <div className="space-y-4">
+          <Input label="Title (English)" value={aForm.title_en} onChange={setAF('title_en')} placeholder="Announcement title"/>
+          <Input label="Title (Tamil)" value={aForm.title_ta} onChange={setAF('title_ta')} placeholder="தமிழில் தலைப்பு"/>
+          <Input label="Description (English)" value={aForm.description_en} onChange={setAF('description_en')} placeholder="Detailed description"/>
+          <Input label="Description (Tamil)" value={aForm.description_ta} onChange={setAF('description_ta')} placeholder="தமிழில் விளக்கம்"/>
+          <div className="grid grid-cols-2 gap-3">
+            <Select label="Type" value={aForm.type} onChange={setAF('type')} options={[{value:'exam',label:'🎓 Exam'},{value:'material',label:'📚 Material'},{value:'test',label:'📝 Test'},{value:'general',label:'📢 General'}]}/>
+            <Input label="Date" type="date" value={aForm.date} onChange={setAF('date')}/>
+          </div>
+          <div className="flex gap-3 pt-2">
+            <Button onClick={saveAnn} className="flex-1">Publish Announcement</Button>
+            <Button onClick={()=>setModal(null)} variant="secondary">Cancel</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {toast && <Toast message={toast.msg} type={toast.type} onClose={()=>setToast(null)}/>}
+    </div>
+  );
+}
+
+// ============================================================
+// SEARCH PAGE
+// ============================================================
+function SearchPage() {
+  const { lang, questions, materials, mockTests, nav } = useApp();
+  const [q, setQ] = React.useState('');
+  const filtered = q.trim().length > 1 ? {
+    questions: questions.filter(x => x.question_en.toLowerCase().includes(q.toLowerCase()) || x.question_ta.includes(q)),
+    materials: materials.filter(x => x.title_en.toLowerCase().includes(q.toLowerCase()) || x.title_ta.includes(q)),
+    tests: mockTests.filter(x => x.title_en.toLowerCase().includes(q.toLowerCase()) || x.title_ta.includes(q)),
+  } : null;
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-8 fade-in">
+      <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-6">🔍 Search</h1>
+      <div className="relative mb-6">
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">🔍</span>
+        <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search questions, materials, tests..." autoFocus
+          className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-base focus:outline-none focus:border-blue-500"/>
+      </div>
+      {filtered && (
+        <div className="space-y-6">
+          {filtered.questions.length > 0 && (
+            <div>
+              <h3 className="font-bold text-gray-700 dark:text-gray-300 mb-3">Questions ({filtered.questions.length})</h3>
+              {filtered.questions.slice(0,5).map(q=>(
+                <Card key={q.id} className="mb-2" onClick={()=>nav('practiceQuiz',{questions:[q],title:'Practice'})}>
+                  <div className="flex gap-2 mb-1"><Badge color={q.category==='MAT'?'blue':'green'}>{q.category}</Badge><Badge color="gray">{q.subject}</Badge></div>
+                  <div className="text-sm text-gray-800 dark:text-gray-200">{lang==='ta'?q.question_ta:q.question_en}</div>
+                </Card>
+              ))}
+            </div>
+          )}
+          {filtered.materials.length > 0 && (
+            <div>
+              <h3 className="font-bold text-gray-700 dark:text-gray-300 mb-3">Study Materials ({filtered.materials.length})</h3>
+              {filtered.materials.map(m=>(
+                <Card key={m.id} className="mb-2" onClick={()=>nav('studyMaterials')}>
+                  <div className="font-semibold text-gray-900 dark:text-white">{lang==='ta'?m.title_ta:m.title_en}</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">{m.subject} • {m.type}</div>
+                </Card>
+              ))}
+            </div>
+          )}
+          {filtered.tests.length > 0 && (
+            <div>
+              <h3 className="font-bold text-gray-700 dark:text-gray-300 mb-3">Mock Tests ({filtered.tests.length})</h3>
+              {filtered.tests.map(t=>(
+                <Card key={t.id} className="mb-2" onClick={()=>nav('mockTests')}>
+                  <div className="font-semibold text-gray-900 dark:text-white">{lang==='ta'?t.title_ta:t.title_en}</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">{t.total_questions} questions • {t.duration} min</div>
+                </Card>
+              ))}
+            </div>
+          )}
+          {filtered.questions.length===0 && filtered.materials.length===0 && filtered.tests.length===0 && (
+            <div className="text-center py-12"><div className="text-5xl mb-4">🔍</div><div className="text-gray-500 dark:text-gray-400">No results found for "{q}"</div></div>
+          )}
+        </div>
+      )}
+      {!filtered && q.length===0 && (
+        <div className="text-center py-12 text-gray-400"><div className="text-5xl mb-4">🔍</div><div>Start typing to search...</div></div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// FOOTER
+// ============================================================
+function Footer() {
+  const { lang, nav } = useApp();
+  return (
+    <footer className="bg-gray-900 text-gray-400 py-10 px-4 mt-16">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">NM</div>
+              <div className="text-white font-bold">NMMS Tamil Nadu</div>
+            </div>
+            <p className={`text-sm ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'8ம் வகுப்பு மாணவர்களுக்கான NMMS தயாரிப்பு தளம்':'NMMS preparation portal for Class 8 Tamil Nadu students'}</p>
+          </div>
+          <div>
+            <div className="text-white font-semibold mb-3">Quick Links</div>
+            {[['home','Home'],['studyMaterials','Study Materials'],['mockTests','Mock Tests'],['previousPapers','Previous Papers']].map(([k,l])=>(
+              <button key={k} onClick={()=>nav(k)} className="block text-sm hover:text-white transition mb-1">{l}</button>
+            ))}
+          </div>
+          <div>
+            <div className="text-white font-semibold mb-3">Subjects</div>
+            {['Mental Ability (MAT)','Mathematics (SAT)','Science (SAT)','Social Science (SAT)'].map(s=>(
+              <div key={s} className="text-sm mb-1">{s}</div>
+            ))}
+          </div>
+          <div>
+            <div className="text-white font-semibold mb-3">Admin Access</div>
+            <div className="text-sm mb-1">Email: admin@nmms.in</div>
+            <div className="text-sm mb-3">Password: admin123</div>
+            <button onClick={()=>nav('login')} className="text-sm bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Admin Login</button>
+          </div>
+        </div>
+        <div className="border-t border-gray-800 pt-6 text-center text-sm">
+          <p>© 2025 NMMS Tamil Nadu – Bilingual Learning Portal | Built for Tamil Nadu Class 8 Students 🎓</p>
+          <p className="mt-1 text-xs">Scholarship Scheme by Ministry of Education, Govt. of India | Tamil Nadu State Implementation</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ============================================================
+// MAIN APP ROUTER
+// ============================================================
+function App() {
+  const { page, pageData, lang, t, questions } = useApp();
+
+  const renderPage = () => {
+    switch(page) {
+      case 'home': return <HomePage/>;
+      case 'login': return <LoginPage/>;
+      case 'register': return <RegisterPage/>;
+      case 'studyMaterials': return <StudyMaterialsPage/>;
+      case 'mockTests': return <MockTestsPage/>;
+      case 'previousPapers': return <PreviousYearsPage/>;
+      case 'dailyQuiz': return <DailyQuizPage/>;
+      case 'progress': return <ProgressPage/>;
+      case 'announcements': return <AnnouncementsPage/>;
+      case 'admin': return <AdminDashboard/>;
+      case 'search': return <SearchPage/>;
+      case 'practiceQuiz': return <PracticeQuizPage/>;
+      default: return <HomePage/>;
+    }
+  };
+
+  return (
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 font-inter`}>
+      <Navbar/>
+      <main>{renderPage()}</main>
+      {page !== 'admin' && <Footer/>}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <AppProvider>
+    <App/>
+  </AppProvider>
+);
+</script>
+</body>
+</html>
