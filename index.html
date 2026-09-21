@@ -37,6 +37,10 @@ body{font-family:'Inter',sans-serif;margin:0}
 .dark ::-webkit-scrollbar-thumb{background:#475569}
 .fade-in{animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.student-photo{animation:studentFloat 5s ease-in-out infinite;box-shadow:0 24px 50px rgba(15,23,42,.18)}
+.learning-photo{background:#fffaf0;padding:8px;border:1px solid rgba(255,255,255,.85);box-shadow:0 18px 38px rgba(15,23,42,.16)}
+.learning-photo:nth-child(2){animation-delay:.35s}.learning-photo:nth-child(3){animation-delay:.7s}
+@keyframes studentFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
 .badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:600;letter-spacing:.3px}
 .progress-bar{height:8px;border-radius:4px;background:#e2e8f0;overflow:hidden}
 .progress-fill{height:100%;border-radius:4px;transition:width .6s ease}
@@ -151,24 +155,29 @@ const DEMO_QUESTIONS = [
 ];
 
 const DEMO_MATERIALS = [
-  {id:1,title_en:"Mental Ability Complete Notes",title_ta:"மனத்திறன் முழுமையான குறிப்புகள்",desc_en:"Covers all MAT topics: analogy, classification, series, coding, blood relations, direction.",desc_ta:"அனைத்து MAT தலைப்புகளையும் உள்ளடக்கியது: அனலஜி, வகைப்பாடு, தொடர், குறியீடு, இரத்த உறவு, திசை.",subj:"Mental Ability",topic:"All Topics",med:"both",cat:"MAT",type:"Notes",published:true,thumb:"📚",url:""},
-  {id:2,title_en:"Mathematics Formula Sheet",title_ta:"கணிதம் சூத்திர தாள்",desc_en:"All key formulas for Class 8 Maths – Algebra, Geometry, Mensuration, Statistics.",desc_ta:"8ம் வகுப்பு கணிதத்திற்கான சூத்திரங்கள் – இயற்கணிதம், வடிவியல், அளவியல்.",subj:"Mathematics",topic:"All Topics",med:"both",cat:"SAT",type:"PDF",published:true,thumb:"📐",url:""},
-  {id:3,title_en:"Science Chapter-wise MCQs",title_ta:"அறிவியல் அத்தியாயம் வாரியான MCQ",desc_en:"500+ MCQs from all Science chapters with answers and detailed explanations.",desc_ta:"அனைத்து அறிவியல் அத்தியாயங்களிலிருந்து 500+ MCQ விடைகளுடன்.",subj:"Science",topic:"All Chapters",med:"both",cat:"SAT",type:"Quiz",published:true,thumb:"🔬",url:""},
-  {id:4,title_en:"Social Science Map Work",title_ta:"சமூக அறிவியல் வரைபட பணி",desc_en:"Map-based questions for Indian Geography and History.",desc_ta:"இந்திய புவியியல் மற்றும் வரலாற்றிற்கான வரைபட கேள்விகள்.",subj:"Social Science",topic:"Geography & History",med:"both",cat:"SAT",type:"PDF",published:true,thumb:"🗺️",url:""},
+  {id:1,title_en:"Mental Ability Complete Notes",title_ta:"மனத்திறன் முழுமையான குறிப்புகள்",desc_en:"Covers all MAT topics: analogy, classification, series, coding, blood relations, direction.",desc_ta:"அனைத்து MAT தலைப்புகளையும் உள்ளடக்கியது: அனலஜி, வகைப்பாடு, தொடர், குறியீடு, இரத்த உறவு, திசை.",subj:"Mental Ability",topic:"All Topics",med:"both",cat:"MAT",type:"Notes",published:true,thumb:"📚",url:"",docUrl:"",answerUrl:""},
+  {id:2,title_en:"Mathematics Formula Sheet",title_ta:"கணிதம் சூத்திர தாள்",desc_en:"All key formulas for Class 8 Maths – Algebra, Geometry, Mensuration, Statistics.",desc_ta:"8ம் வகுப்பு கணிதத்திற்கான சூத்திரங்கள் – இயற்கணிதம், வடிவியல், அளவியல்.",subj:"Mathematics",topic:"All Topics",med:"both",cat:"SAT",type:"PDF",published:true,thumb:"📐",url:"",docUrl:"",answerUrl:""},
+  {id:3,title_en:"Science Chapter-wise MCQs",title_ta:"அறிவியல் அத்தியாயம் வாரியான MCQ",desc_en:"500+ MCQs from all Science chapters with answers and detailed explanations.",desc_ta:"அனைத்து அறிவியல் அத்தியாயங்களிலிருந்து 500+ MCQ விடைகளுடன்.",subj:"Science",topic:"All Chapters",med:"both",cat:"SAT",type:"Quiz",published:true,thumb:"🔬",url:"",docUrl:"",answerUrl:""},
+  {id:4,title_en:"Social Science Map Work",title_ta:"சமூக அறிவியல் வரைபட பணி",desc_en:"Map-based questions for Indian Geography and History.",desc_ta:"இந்திய புவியியல் மற்றும் வரலாற்றிற்கான வரைபட கேள்விகள்.",subj:"Social Science",topic:"Geography & History",med:"both",cat:"SAT",type:"PDF",published:true,thumb:"🗺️",url:"",docUrl:"",answerUrl:""},
 ];
 
 const DEMO_TESTS = [
-  {id:1,title_en:"NMMS Full Mock Test 2024",title_ta:"NMMS முழு மாதிரி தேர்வு 2024",desc_en:"Full NMMS mock: 20 questions across MAT & SAT. Duration: 40 minutes.",desc_ta:"20 வினாக்களுடன் முழு NMMS மாதிரி தேர்வு. கால அளவு: 40 நிமிடங்கள்.",duration:40,marks:1,neg:0,status:"published",qids:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]},
-  {id:2,title_en:"MAT Practice Test – Series 1",title_ta:"MAT பயிற்சி தேர்வு – தொடர் 1",desc_en:"Mental Ability questions: analogy, series, classification.",desc_ta:"மனத்திறன் வினாக்கள்: அனலஜி, தொடர், வகைப்பாடு.",duration:20,marks:1,neg:0,status:"published",qids:[1,2,3,4,5]},
-  {id:3,title_en:"SAT Mathematics Test",title_ta:"SAT கணிதம் தேர்வு",desc_en:"Mathematics preparation covering all important topics.",desc_ta:"அனைத்து முக்கிய தலைப்புகளையும் உள்ளடக்கிய கணிதம் தேர்வு.",duration:25,marks:1,neg:0,status:"published",qids:[6,7,8,9,19]},
+  {id:1,title_en:"NMMS Full Mock Test 2024",title_ta:"NMMS முழு மாதிரி தேர்வு 2024",desc_en:"Full NMMS mock: 20 questions across MAT & SAT. Duration: 40 minutes.",desc_ta:"20 வினாக்களுடன் முழு NMMS மாதிரி தேர்வு. கால அளவு: 40 நிமிடங்கள்.",duration:40,marks:1,neg:0,status:"published",qids:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],fileUrl:""},
+  {id:2,title_en:"MAT Practice Test – Series 1",title_ta:"MAT பயிற்சி தேர்வு – தொடர் 1",desc_en:"Mental Ability questions: analogy, series, classification.",desc_ta:"மனத்திறன் வினாக்கள்: அனலஜி, தொடர், வகைப்பாடு.",duration:20,marks:1,neg:0,status:"published",qids:[1,2,3,4,5],fileUrl:""},
+  {id:3,title_en:"SAT Mathematics Test",title_ta:"SAT கணிதம் தேர்வு",desc_en:"Mathematics preparation covering all important topics.",desc_ta:"அனைத்து முக்கிய தலைப்புகளையும் உள்ளடக்கிய கணிதம் தேர்வு.",duration:25,marks:1,neg:0,status:"published",qids:[6,7,8,9,19],fileUrl:""},
 ];
 
 const DEMO_PAPERS = [
-  {id:1,yr:2023,cat:"MAT",title:"NMMS 2023 MAT Paper",qids:[1,2,3,4,5]},
-  {id:2,yr:2023,cat:"SAT",title:"NMMS 2023 SAT Paper",qids:[6,7,10,13,14]},
-  {id:3,yr:2022,cat:"MAT",title:"NMMS 2022 MAT Paper",qids:[2,4,5,1,3]},
-  {id:4,yr:2022,cat:"SAT",title:"NMMS 2022 SAT Paper",qids:[8,15,18,9,19]},
-  {id:5,yr:2021,cat:"SAT",title:"NMMS 2021 SAT Paper",qids:[12,11,13,14,17]},
+  {id:1,yr:2023,cat:"MAT",title:"NMMS 2023 MAT Paper",qids:[1,2,3,4,5],fileUrl:"NMMS Question Paper 2023 (MAT).pdf"},
+  {id:2,yr:2023,cat:"SAT",title:"NMMS 2023 SAT Paper",qids:[6,7,10,13,14],fileUrl:"NMMS Question Paper 2023 (SAT).pdf"},
+  {id:3,yr:2022,cat:"MAT",title:"NMMS 2022 MAT Paper",qids:[2,4,5,1,3],fileUrl:""},
+  {id:4,yr:2022,cat:"SAT",title:"NMMS 2022 SAT Paper",qids:[8,15,18,9,19],fileUrl:""},
+  {id:5,yr:2021,cat:"MAT & SAT",title:"NMMS 2021 MAT & SAT Paper",qids:[12,11,13,14,17],fileUrl:"NMMS Question Paper 2021 (MAT & SAT).pdf"},
+  {id:6,yr:2020,cat:"MAT & SAT",title:"NMMS 2020 MAT & SAT Paper",qids:[1,6,10,14,18],fileUrl:"NMMS Question Paper 2020 (MAT & SAT)-1.pdf"},
+  {id:7,yr:2019,cat:"MAT",title:"NMMS 2019 MAT Paper",qids:[1,2,3,4,5],fileUrl:"NMMS Question Paper 2019 (MAT)-2.pdf"},
+  {id:8,yr:2019,cat:"SAT",title:"NMMS 2019 SAT Paper",qids:[6,7,10,13,14],fileUrl:"NMMS Question Paper 2019 (SAT).pdf"},
+  {id:9,yr:2018,cat:"MAT",title:"NMMS 2018 MAT Paper",qids:[1,2,3,4,5],fileUrl:"NMMS Question Paper 2018 (MAT).pdf"},
+  {id:10,yr:2018,cat:"SAT",title:"NMMS 2018 SAT Paper",qids:[6,7,10,13,14],fileUrl:"NMMS Question Paper 2018 (SAT).pdf"},
 ];
 
 const DEMO_ANNS = [
@@ -194,6 +203,7 @@ const TIPS = [
 ═══════════════════════════════════════════ */
 const gl = (k,d) => { try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;} };
 const sl = (k,v) => { try{localStorage.setItem(k,JSON.stringify(v));}catch{} };
+const readFile = file => new Promise((resolve,reject)=>{ if(!file){resolve('');return;} const r=new FileReader(); r.onload=()=>resolve(r.result); r.onerror=reject; r.readAsDataURL(file); });
 const fmt = s => { const m=Math.floor(s/60),sec=s%60; return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`; };
 const examDays = () => { const e=new Date('2026-11-20'),n=new Date(); return Math.max(0,Math.ceil((e-n)/864e5)); };
 const todayTip = TIPS[new Date().getDay()%TIPS.length];
@@ -320,6 +330,14 @@ function Inp({label,type='text',value,onChange,placeholder,required,cls='',rows}
       {rows ? <textarea rows={rows} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} required={required} className={base}/> : <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} required={required} className={base}/>}
     </div>
   );
+}
+
+function FilePick({label,accept,value,onChange}){
+  return <div>
+    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">{label}</label>
+    <input type="file" accept={accept} onChange={e=>onChange(e.target.files&&e.target.files[0])} className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm"/>
+    {value&&<div className="text-xs text-green-600 dark:text-green-400 mt-1">✓ File attached</div>}
+  </div>;
 }
 
 function Sel({label,value,onChange,opts,cls=''}){
@@ -462,14 +480,15 @@ function HomePage(){
   return(
     <div className="fade-in">
       {/* Hero */}
-      <div className="gradient-hero text-white py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+      <div className="gradient-hero text-white py-12 px-4 overflow-hidden">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_360px] items-center gap-10">
+        <div className="text-center lg:text-left">
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 text-sm font-medium">
             🎓 Tamil Nadu Class 8 · NMMS Scholarship 2025
           </div>
           <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight ${lang==='ta'?'tamil':''}`}>{t('heroTitle')}</h1>
           <p className={`text-blue-100 text-base sm:text-lg mb-8 max-w-2xl mx-auto ${lang==='ta'?'tamil':''}`}>{t('heroSub')}</p>
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
             <button onClick={()=>nav('studyMaterials')} className="bg-white text-blue-700 px-7 py-3 rounded-xl font-bold text-sm sm:text-base hover:bg-blue-50 transition shadow-lg">
               📚 {t('startLearning')}
             </button>
@@ -477,7 +496,7 @@ function HomePage(){
               📝 {t('takeMockTest')}
             </button>
           </div>
-          <div className="grid grid-cols-3 gap-4 mt-10 max-w-md mx-auto">
+          <div className="grid grid-cols-3 gap-4 mt-10 max-w-md mx-auto lg:mx-0">
             {[['1000+','Students'],['500+','Questions'],['10+','Mock Tests']].map(([n,l])=>(
               <div key={l} className="bg-white/10 backdrop-blur-sm rounded-2xl py-4">
                 <div className="text-2xl font-extrabold">{n}</div>
@@ -485,6 +504,11 @@ function HomePage(){
               </div>
             ))}
           </div>
+        </div>
+        <div className="relative hidden sm:flex justify-center">
+          <div className="absolute inset-6 rounded-[2rem] bg-cyan-300/20 blur-2xl"></div>
+          <img src="download (1).jpg" alt="Students learning in a classroom" className="student-photo learning-photo relative w-full max-w-sm aspect-[4/3] object-cover rounded-[1.25rem]"/>
+        </div>
         </div>
       </div>
 
@@ -523,6 +547,17 @@ function HomePage(){
                 <div className={`text-gray-500 dark:text-gray-400 text-xs mt-1 text-center ${lang==='ta'?'tamil':''}`}>{lang==='ta'?f.dt:f.de}</div>
               </Card>
             ))}
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-[1fr_240px] gap-6 items-center bg-amber-50 dark:bg-amber-900/20 rounded-2xl p-5 border border-amber-100 dark:border-amber-800">
+          <div>
+            <h2 className={`text-xl font-extrabold text-gray-900 dark:text-white mb-2 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'ஒன்றாகக் கற்போம்':'Learn together, prepare with confidence'}</h2>
+            <p className={`text-sm text-gray-600 dark:text-gray-300 leading-relaxed ${lang==='ta'?'tamil':''}`}>{lang==='ta'?'மாணவர்களுக்கான குறிப்புகள், முந்தைய ஆண்டு வினாத்தாள்கள் மற்றும் பயிற்சி தேர்வுகள் ஒரே இடத்தில்.':'Access organized study files, previous-year question papers, mock tests, and daily practice in one place.'}</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <img src="download (2).jpg" alt="Students writing and studying" className="student-photo learning-photo w-full aspect-square object-cover rounded-xl"/>
+            <img src="download (3).jpg" alt="Teacher guiding students" className="student-photo learning-photo w-full aspect-square object-cover rounded-xl"/>
           </div>
         </div>
 
@@ -778,7 +813,8 @@ function StudyMaterialsPage(){
               <div className="flex flex-wrap gap-1 mb-3"><Badge c="blue">{m.cat}</Badge><Badge c="gray">{m.subj}</Badge></div>
               <div className="flex gap-2">
                 <Btn sz="sm" cls="flex-1" onClick={()=>nav('practiceQuiz',{qs:questions.filter(q=>q.subj===m.subj).slice(0,10),title:lang==='ta'?m.title_ta:m.title_en})}>👁️ {t('view')}</Btn>
-                {m.type==='PDF'&&<Btn sz="sm" v="secondary" onClick={()=>m.url?window.open(m.url,'_blank'):alert('PDF not uploaded yet by admin')}>⬇️</Btn>}
+                {(m.url||m.docUrl)&&<Btn sz="sm" v="secondary" onClick={()=>window.open(m.url||m.docUrl,'_blank')}>⬇️ File</Btn>}
+                {m.answerUrl&&<Btn sz="sm" v="secondary" onClick={()=>window.open(m.answerUrl,'_blank')}>✅ Ans</Btn>}
                 {m.type==='Video'&&m.url&&<Btn sz="sm" v="secondary" onClick={()=>window.open(m.url,'_blank')}>▶️</Btn>}
               </div>
             </Card>
@@ -846,7 +882,7 @@ function MockTestsPage(){
             <h3 className={`text-base font-bold text-gray-900 dark:text-white mb-2 flex-1 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?test.title_ta:test.title_en}</h3>
             <p className={`text-sm text-gray-500 dark:text-gray-400 mb-4 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?test.desc_ta:test.desc_en}</p>
             <div className="flex gap-3 text-xs text-gray-500 dark:text-gray-400 mb-4"><span>📋 {test.qids.length} Qs</span><span>⏱️ {test.duration} min</span><span>🏆 {test.qids.length*test.marks} marks</span></div>
-            <Btn onClick={()=>{setSel(test);setPhase('instructions');}} cls="w-full">{t('startTest')}</Btn>
+            <div className="flex gap-2"><Btn onClick={()=>{setSel(test);setPhase('instructions');}} cls="flex-1">{t('startTest')}</Btn>{test.fileUrl&&<Btn v="secondary" onClick={()=>window.open(test.fileUrl,'_blank')}>📄</Btn>}</div>
           </Card>
         ))}
         {mockTests.filter(t=>t.status==='published').length===0&&<div className="col-span-3 text-center py-16 text-gray-400"><div className="text-5xl mb-3">📝</div><div>No mock tests published yet.</div></div>}
@@ -872,6 +908,10 @@ function PreviousPapersPage(){
       <div className="max-w-4xl mx-auto px-4 py-6 fade-in">
         <button onClick={()=>setSel(null)} className="text-blue-600 font-semibold mb-4 flex items-center gap-1 hover:underline text-sm">← {t('previousPapers')}</button>
         <div className="mb-6 flex items-center gap-3"><h2 className="text-xl font-bold text-gray-900 dark:text-white">{sel.title}</h2><Badge c={sel.cat==='MAT'?'blue':'green'}>{sel.cat}</Badge><Badge c="gray">{sel.yr}</Badge></div>
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Question paper view only. Practice the MCQs in Mock Tests or Daily Quiz.</p>
+          {sel.fileUrl&&<Btn onClick={()=>window.open(sel.fileUrl,'_blank')} v="secondary">📄 Open Source PDF</Btn>}
+        </div>
         <div className="space-y-5">
           {testQs.map((q,idx)=>(
             <Card key={q.id}>
@@ -880,15 +920,7 @@ function PreviousPapersPage(){
                 <Badge c={q.cat==='MAT'?'blue':'green'}>{q.cat}</Badge><Badge c="gray">{q.subj}</Badge><Badge c="orange">{q.topic}</Badge>
               </div>
               <div className={`text-gray-900 dark:text-white font-medium mb-4 ${lang==='ta'?'tamil':''}`}>{lang==='ta'?q.q_ta:q.q_en}</div>
-              <div className="grid sm:grid-cols-2 gap-2 mb-4">
-                {['a','b','c','d'].map(opt=>(
-                  <div key={opt} className={`p-3 rounded-xl text-sm border-2 ${opt===q.ans?'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200':'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300'}`}>
-                    <span className="font-bold mr-2">{opt.toUpperCase()}.</span>{lang==='ta'?<span className="tamil">{q[`${opt}_ta`]}</span>:q[`${opt}_en`]}
-                    {opt===q.ans&&<span className="ml-2 text-green-600 font-bold">✓</span>}
-                  </div>
-                ))}
-              </div>
-              <div className={`bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700/50 p-3 rounded-xl text-xs text-yellow-800 dark:text-yellow-300 ${lang==='ta'?'tamil':''}`}>💡 {lang==='ta'?q.exp_ta:q.exp_en}</div>
+              <div className="text-xs text-gray-400 dark:text-gray-500">MCQ options and answers are available in Mock Tests and Daily Quiz.</div>
             </Card>
           ))}
         </div>
@@ -901,7 +933,7 @@ function PreviousPapersPage(){
       <Card cls="mb-6">
         <div className="flex flex-wrap gap-3">
           <Sel value={yrF} onChange={setYrF} opts={[{v:'all',l:'All Years'},...yrs.map(y=>({v:y,l:String(y)}))]}/>
-          <Sel value={catF} onChange={setCatF} opts={[{v:'all',l:'MAT & SAT'},{v:'MAT',l:'MAT – Mental Ability'},{v:'SAT',l:'SAT – Scholastic Aptitude'}]}/>
+          <Sel value={catF} onChange={setCatF} opts={[{v:'all',l:'MAT & SAT'},{v:'MAT',l:'MAT – Mental Ability'},{v:'SAT',l:'SAT – Scholastic Aptitude'},{v:'MAT & SAT',l:'MAT & SAT Combined'}]}/>
         </div>
       </Card>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
@@ -913,7 +945,7 @@ function PreviousPapersPage(){
             </div>
             <h3 className="font-bold text-gray-900 dark:text-white mb-1 text-sm">{p.title}</h3>
             <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-3"><span>📅 {p.yr}</span><span>📋 {p.qids.length} Questions</span></div>
-            <Btn sz="sm" cls="w-full">{t('view')} Questions →</Btn>
+            <div className="flex gap-2"><Btn sz="sm" cls="flex-1">{t('view')} Questions →</Btn>{p.fileUrl&&<Btn sz="sm" v="secondary" onClick={e=>{e.stopPropagation();window.open(p.fileUrl,'_blank')}}>📄 PDF</Btn>}</div>
           </Card>
         ))}
         {filtered.length===0&&<div className="col-span-3 text-center py-12 text-gray-400"><div className="text-5xl mb-3">📄</div><div>No papers found.</div></div>}
@@ -1045,15 +1077,17 @@ function QuestionForm({init,onSave,onCancel}){
 /* ═══════════════════════════════════════════
    ADMIN — MATERIAL FORM
 ═══════════════════════════════════════════ */
-const emptyM={title_en:'',title_ta:'',desc_en:'',desc_ta:'',subj:'Mathematics',cat:'SAT',type:'PDF',med:'both',topic:'',thumb:'📚',url:'',published:true};
+const emptyM={title_en:'',title_ta:'',desc_en:'',desc_ta:'',subj:'Mathematics',cat:'SAT',type:'PDF',med:'both',topic:'',thumb:'📚',url:'',docUrl:'',answerUrl:'',published:true};
 function MaterialForm({init,onSave,onCancel}){
   const [f,setF]=React.useState(init||{...emptyM});
+  const [busy,setBusy]=React.useState(false);
   const s=k=>v=>setF(p=>({...p,[k]:v}));
+  const attach=k=>async file=>{if(file){setBusy(true);s(k)(await readFile(file));setBusy(false);}};
   const save=e=>{e.preventDefault();if(!f.title_en){alert('Title (English) required');return;}onSave(f);};
   return(
     <form onSubmit={save} className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
-        <Sel label="Category" value={f.cat} onChange={s('cat')} opts={[{v:'MAT',l:'MAT'},{v:'SAT',l:'SAT'}]}/>
+        <Sel label="Category" value={f.cat} onChange={s('cat')} opts={[{v:'MAT',l:'MAT'},{v:'SAT',l:'SAT'},{v:'MAT & SAT',l:'MAT & SAT Combined'}]}/>
         <Sel label="Subject" value={f.subj} onChange={s('subj')} opts={[{v:'Mental Ability',l:'Mental Ability'},{v:'Mathematics',l:'Mathematics'},{v:'Science',l:'Science'},{v:'Social Science',l:'Social Science'},{v:'Language',l:'Language'}]}/>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1071,6 +1105,10 @@ function MaterialForm({init,onSave,onCancel}){
       </div>
       <Inp label="Topic" value={f.topic} onChange={s('topic')} placeholder="e.g. Algebra, Cell Biology"/>
       <Inp label="PDF / Video URL (optional)" value={f.url} onChange={s('url')} placeholder="https://..."/>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
+        <FilePick label="Upload Study Material (PDF or DOC/DOCX)" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" value={f.url||f.docUrl} onChange={async file=>{if(file){setBusy(true);const data=await readFile(file);const isDoc=/\.docx?$/i.test(file.name);s(isDoc?'docUrl':'url')(data);if(isDoc)s('url')('');else s('docUrl')('');setBusy(false);}}}/>
+        <FilePick label="Upload Answer Sheet (optional)" accept=".pdf,.doc,.docx,image/*" value={f.answerUrl} onChange={attach('answerUrl')}/>
+      </div>
       <div className="flex items-center gap-3">
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" checked={f.published} onChange={e=>s('published')(e.target.checked)} className="w-4 h-4 accent-blue-600"/>
@@ -1078,7 +1116,7 @@ function MaterialForm({init,onSave,onCancel}){
         </label>
       </div>
       <div className="flex gap-3 pt-2">
-        <Btn type="submit" cls="flex-1" sz="lg">💾 Save Material</Btn>
+        <Btn type="submit" cls="flex-1" sz="lg" disabled={busy}>💾 {busy?'Reading file…':'Save Material'}</Btn>
         <Btn onClick={onCancel} v="secondary" sz="lg">Cancel</Btn>
       </div>
     </form>
@@ -1088,10 +1126,12 @@ function MaterialForm({init,onSave,onCancel}){
 /* ═══════════════════════════════════════════
    ADMIN — MOCK TEST FORM
 ═══════════════════════════════════════════ */
-const emptyT={title_en:'',title_ta:'',desc_en:'',desc_ta:'',duration:45,marks:1,neg:0,status:'draft',qids:[]};
+const emptyT={title_en:'',title_ta:'',desc_en:'',desc_ta:'',duration:45,marks:1,neg:0,status:'draft',qids:[],fileUrl:''};
 function MockTestForm({init,questions,onSave,onCancel}){
   const [f,setF]=React.useState(init||{...emptyT,qids:[]});
+  const [busy,setBusy]=React.useState(false);
   const s=k=>v=>setF(p=>({...p,[k]:v}));
+  const attach=async file=>{if(file){setBusy(true);s('fileUrl')(await readFile(file));setBusy(false);}};
   const [qSearch,setQS]=React.useState('');
   const filtQ=questions.filter(q=>qSearch===''||q.q_en.toLowerCase().includes(qSearch.toLowerCase())||q.subj.toLowerCase().includes(qSearch.toLowerCase())||q.cat.toLowerCase().includes(qSearch.toLowerCase()));
   const toggle=id=>setF(p=>({...p,qids:p.qids.includes(id)?p.qids.filter(x=>x!==id):[...p.qids,id]}));
@@ -1110,6 +1150,7 @@ function MockTestForm({init,questions,onSave,onCancel}){
         <Inp label="Negative Marks" type="number" value={f.neg} onChange={v=>s('neg')(Number(v))}/>
       </div>
       <Sel label="Status" value={f.status} onChange={s('status')} opts={[{v:'draft',l:'Draft'},{v:'published',l:'Published'}]}/>
+      <FilePick label="Upload Test Paper / Answer Sheet (optional)" accept=".pdf,.doc,.docx,image/*" value={f.fileUrl} onChange={attach}/>
       <div>
         <div className="flex items-center justify-between mb-2">
           <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Select Questions ({f.qids.length} selected)</label>
@@ -1128,7 +1169,7 @@ function MockTestForm({init,questions,onSave,onCancel}){
         </div>
       </div>
       <div className="flex gap-3 pt-2">
-        <Btn type="submit" cls="flex-1" sz="lg">💾 Save Mock Test</Btn>
+        <Btn type="submit" cls="flex-1" sz="lg" disabled={busy}>💾 {busy?'Reading file…':'Save Mock Test'}</Btn>
         <Btn onClick={onCancel} v="secondary" sz="lg">Cancel</Btn>
       </div>
     </form>
@@ -1138,10 +1179,12 @@ function MockTestForm({init,questions,onSave,onCancel}){
 /* ═══════════════════════════════════════════
    ADMIN — PAPER FORM
 ═══════════════════════════════════════════ */
-const emptyP={yr:2023,cat:'MAT',title:'',qids:[]};
+const emptyP={yr:2023,cat:'MAT',title:'',qids:[],fileUrl:''};
 function PaperForm({init,questions,onSave,onCancel}){
   const [f,setF]=React.useState(init||{...emptyP,qids:[]});
+  const [busy,setBusy]=React.useState(false);
   const s=k=>v=>setF(p=>({...p,[k]:v}));
+  const attach=async file=>{if(file){setBusy(true);s('fileUrl')(await readFile(file));setBusy(false);}};
   const [qSearch,setQS]=React.useState('');
   const filtQ=questions.filter(q=>qSearch===''||q.q_en.toLowerCase().includes(qSearch.toLowerCase())||q.cat===f.cat);
   const toggle=id=>setF(p=>({...p,qids:p.qids.includes(id)?p.qids.filter(x=>x!==id):[...p.qids,id]}));
@@ -1153,6 +1196,7 @@ function PaperForm({init,questions,onSave,onCancel}){
         <Sel label="Category" value={f.cat} onChange={s('cat')} opts={[{v:'MAT',l:'MAT'},{v:'SAT',l:'SAT'}]}/>
         <Inp label="Paper Title *" value={f.title} onChange={s('title')} placeholder="e.g. NMMS 2023 MAT" required/>
       </div>
+      <FilePick label="Upload Source Question Paper PDF / Answer Sheet (optional)" accept=".pdf,.doc,.docx,image/*" value={f.fileUrl} onChange={attach}/>
       <div>
         <div className="flex items-center justify-between mb-2">
           <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Select Questions ({f.qids.length} selected)</label>
@@ -1168,7 +1212,7 @@ function PaperForm({init,questions,onSave,onCancel}){
         </div>
       </div>
       <div className="flex gap-3 pt-2">
-        <Btn type="submit" cls="flex-1" sz="lg">💾 Save Paper</Btn>
+        <Btn type="submit" cls="flex-1" sz="lg" disabled={busy}>💾 {busy?'Reading file…':'Save Paper'}</Btn>
         <Btn onClick={onCancel} v="secondary" sz="lg">Cancel</Btn>
       </div>
     </form>
@@ -1342,7 +1386,7 @@ function AdminDashboard(){
                     <div className="flex flex-wrap gap-1.5 mb-1"><Badge c="blue">{m.cat}</Badge><Badge c="gray">{m.type}</Badge><Badge c={m.published?'green':'gray'}>{m.published?'Published':'Draft'}</Badge></div>
                     <div className="font-bold text-gray-900 dark:text-white text-sm">{m.title_en}</div>
                     <div className="text-xs text-gray-500 dark:text-gray-400">{m.subj} · {m.topic}</div>
-                    <div className="text-xs text-gray-400 mt-0.5 truncate">{m.url||'No URL'}</div>
+                    <div className="text-xs text-gray-400 mt-0.5 truncate">{m.url?'PDF attached':m.docUrl?'DOC attached':'No file attached'}{m.answerUrl?' · Answer sheet attached':''}</div>
                   </div>
                   <div className="flex flex-col gap-1 flex-shrink-0">
                     <Btn onClick={()=>openModal('editM',m)} v="secondary" sz="sm">✏️ Edit</Btn>
@@ -1372,6 +1416,7 @@ function AdminDashboard(){
                     <div className="font-bold text-gray-900 dark:text-white">{test.title_en}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{test.desc_en}</div>
                     <div className="text-xs text-gray-400 mt-1">Marks: {test.marks}/Q · Negative: {test.neg}</div>
+                    {test.fileUrl&&<div className="text-xs text-green-600 dark:text-green-400 mt-1">✓ Test file attached</div>}
                   </div>
                   <div className="flex flex-col gap-1 flex-shrink-0">
                     <Btn onClick={()=>openModal('editT',test)} v="secondary" sz="sm">✏️ Edit</Btn>
@@ -1400,6 +1445,7 @@ function AdminDashboard(){
                   <div>
                     <div className="flex gap-1.5 mb-1"><Badge c={p.cat==='MAT'?'blue':'green'}>{p.cat}</Badge><Badge c="gray">📅 {p.yr}</Badge><Badge c="purple">{p.qids.length} Qs</Badge></div>
                     <div className="font-bold text-gray-900 dark:text-white">{p.title}</div>
+                    {p.fileUrl&&<div className="text-xs text-green-600 dark:text-green-400 mt-1">✓ Source PDF attached</div>}
                   </div>
                   <div className="flex gap-1 flex-shrink-0">
                     <Btn onClick={()=>openModal('editP',p)} v="secondary" sz="sm">✏️</Btn>
